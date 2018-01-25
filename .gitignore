@@ -14,3 +14,7 @@
 .AppleDouble
 .LSOverride
 .localized
+
+# Data Bases ignores
+
+*.db
