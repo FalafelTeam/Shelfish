@@ -1,0 +1,16 @@
+# IntelliJ ignores
+
+.idea
+*.iml
+*.iws
+
+# Linux ignores
+
+.directory
+
+# MacOs ignores
+
+.DS_Store
+.AppleDouble
+.LSOverride
+.localized
