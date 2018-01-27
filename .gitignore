@@ -1,20 +1,39 @@
-# IntelliJ ignores
+target/
+!.mvn/wrapper/maven-wrapper.jar
 
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
 .idea
-*.iml
 *.iws
+*.iml
+*.ipr
 
-# Linux ignores
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+### Linux ###
 
 .directory
 
-# MacOs ignores
+### MacOs ###
 
 .DS_Store
 .AppleDouble
 .LSOverride
 .localized
 
-# Data Bases ignores
+### Data Bases ###
 
 *.db
