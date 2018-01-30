@@ -16,13 +16,12 @@ public class User {
     private String type;
     private String login;
     private String password;
+    private String address;
+    private String phoneNumber;
 
     public int getId(){
         return this.id;
-    }
-    public void setId(int id){
-        this.id=id;
-    }
+    } // нет сеттера id потому что авто-инкремент
     public String getName(){
         return this.name;
     }
@@ -56,5 +55,20 @@ public class User {
         else{
             throw new Exception("Too short password");
         }
+    }
+    public String getAddress(){
+        return this.address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber; //надо бы добавить проверочку на то, что введенная строка состоит только из цифр и возможно плюса
     }
 }
