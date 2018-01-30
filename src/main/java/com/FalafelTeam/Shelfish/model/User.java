@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.ArrayList;
 import java.util.Objects;
 
 @Entity
@@ -18,6 +19,7 @@ public class User {
     private String password;
     private String address;
     private String phoneNumber;
+    ArrayList<Document> documents;
 
     public int getId(){
         return this.id;

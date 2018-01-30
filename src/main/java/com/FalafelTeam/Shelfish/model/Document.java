@@ -15,16 +15,17 @@ public class Document {
     private Integer id;
     private String name;
     private String description;
-    private String type;
     private boolean availability; //надо поставить чтобы по дефолту был false
     private int availableCopies;
     private int edition;
-    private String publisher;
-    private String editor;
     private Date publicationDate;
     private boolean isBestseller;
     private Queue<User> queue;
     private int queueCount;
+    private Publisher publisher;
+    private Editor editor;
+    private Author author;
+    public User takenBy;
 
 
     public int getId(){
@@ -47,13 +48,6 @@ public class Document {
         this.description = description;
     }
 
-    public String getType(){
-        return this.type;
-    }
-
-    public void setType(String type){
-        this.type=type;
-    }
 
     public boolean isAvailable(){
         return this.availability;
@@ -98,19 +92,19 @@ public class Document {
         this.edition = edition;
     }
 
-    public String getPublisher(){
+    public Publisher getPublisher(){
         return publisher;
     }
 
-    public void setPublisher(String publisher){
+    public void setPublisher(Publisher publisher){
         this.publisher=publisher;
     }
 
-    public String getEditor(){
+    public Editor getEditor(){
         return this.editor;
     }
 
-    public void setEditor(String editor){
+    public void setEditor(Editor editor){
         this.editor=editor;
     }
 
@@ -156,6 +150,13 @@ public class Document {
 
     public int getQueueCount(){
         return queueCount;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+    public void setAuthor(Author author){
+        this.author=author;
     }
 }
 

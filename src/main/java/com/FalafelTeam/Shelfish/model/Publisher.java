@@ -7,16 +7,15 @@ import javax.persistence.Id;
 import java.util.ArrayList;
 
 @Entity
-public class Author {
-
+public class Publisher {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
     private String name;
     ArrayList<Document> documents;
 
-    public Integer getId() {
-        return id;
+    public int getId(){
+        return this.id;
     }
 
     public String getName() {
