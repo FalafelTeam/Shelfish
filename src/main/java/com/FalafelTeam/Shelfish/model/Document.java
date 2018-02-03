@@ -3,10 +3,7 @@ package com.FalafelTeam.Shelfish.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -25,12 +22,15 @@ public class Document {
     @Getter @Setter private Date publicationDate;
     @Getter @Setter private boolean isBestseller;
     private LinkedList<User> queue;
+    @ManyToOne
     @Getter @Setter private Publisher publisher;
+    @ManyToOne
     @Getter @Setter private Editor editor;
     private ArrayList<Author> authors;
     public ArrayList<User> takenBy;
     @Getter @Setter private int price;
     @Getter @Setter private boolean isReference;
+    @ManyToOne
     @Getter @Setter Type type;
 
     public Document(String name, int price, boolean isReference, boolean isBestseller, int edition, Author author){
@@ -104,7 +104,7 @@ public class Document {
         return queue.size();
     }
 
-    public ArrayList<Author> getAuthor() {
+    public ArrayList<Author> getAuthors() {
         return authors;
     }
 
