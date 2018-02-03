@@ -1,83 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
-				 <head>
-				 <title>Shelfish</title>
-				 </head>
+    <head>
+        <title>Shelfish</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    </head>
 
-				 <style>
+    <style>
+        body {
+            background: #f2f2f2 fixed;
+            background-size: cover;
+        }
+        input[type=submit] {
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            padding: .8em 1em calc(.8em + 3px);
+            border-radius: 3px;
+            background: #4CAF50;
+            box-shadow: 0 -3px rgb(53,167,110) inset;
+            transition: 0.2s;
+            font-size:15px;
+        }
+        input[type=submit]:hover { background: rgb(53, 167, 110); }
+        input[type=submit]:active {
+            background: rgb(33,147,90);
+            box-shadow: 0 3px rgb(33,147,90) inset;
+        }
+        input[type=button] {
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            padding: .8em 1em calc(.8em + 3px);
+            border-radius: 3px;
+            background: #4CAF50;
+            box-shadow: 0 -3px rgb(53,167,110) inset;
+            transition: 0.2s;
+            font-size:15px;
+        }
+        input[type=button]:hover { background: rgb(53, 167, 110); }
+        input[type=button]:active {
+            background: rgb(33,147,90);
+            box-shadow: 0 3px rgb(33,147,90) inset;
+        }
+        input[type=password] {
+            padding: 3px;
+            font-size: 15px;
+            border: solid #4CAF50;
+            -webkit-border-radius: 3px;
+            border-radius: 5px;
+        }
+        input[type=text] {
+            padding:3px;
+            font-size:15px;
+            border: solid #4CAF50;
+            -webkit-border-radius: 3px;
+            border-radius: 5px;
+        }
+    </style>
 
-
-				 body {
-    	 			background: #f2f2f2 fixed;
-    				background-size: cover;
-   				}
-
-
-							input[type=submit] {
-						            font-weight: 700;
-						            color: white;
-						            text-decoration: none;
-						            padding: .8em 1em calc(.8em + 3px);
-						            border-radius: 3px;
-						            background: #4CAF50;
-						            box-shadow: 0 -3px rgb(53,167,110) inset;
-						            transition: 0.2s;
-						            font-size:15px;
-						  }
-						  input[type=submit]:hover { background: rgb(53, 167, 110); }
-						  input[type=submit]:active {
-						  background: rgb(33,147,90);
-						  box-shadow: 0 3px rgb(33,147,90) inset;
-						  }
-
-
-							input[type=button] {
-						            font-weight: 700;
-						            color: white;
-						            text-decoration: none;
-						            padding: .8em 1em calc(.8em + 3px);
-						            border-radius: 3px;
-						            background: #4CAF50;
-						            box-shadow: 0 -3px rgb(53,167,110) inset;
-						            transition: 0.2s;
-						            font-size:15px;
-						  }
-						  input[type=button]:hover { background: rgb(53, 167, 110); }
-						  input[type=button]:active {
-						  background: rgb(33,147,90);
-						  box-shadow: 0 3px rgb(33,147,90) inset;
-						  }
-
-							input[type=password] {
-						    padding:3px;
-						    font-size:15px;
-						    border: solid #4CAF50;
-						    -webkit-border-radius: 3px;
-						    border-radius: 5px;
-						}
-
-						input[type=text] {
-					    padding:3px;
-					    font-size:15px;
-					    border: solid #4CAF50;
-					    -webkit-border-radius: 3px;
-					    border-radius: 5px;
-					}
-  				 </style>
-
-
-
-					<center>
-  					<p align = "center"><form action="handler.php" method="post"></p>
-            <p align = "center"><font size="15" face="Arial" color = #4CAF50>Welcome to Shelfish</p>
-   					<p align = "center"><input type="text" maxlength="25" size="20" name="login" placeholder ="login" id = "username"></p>
-   					<p align = "center"><input type="password" maxlength="25" size="20" name="password" placeholder ="password" id = "password"></p>
-						<p align = "center"><input type="button" value="Login" onClick='location.href="search.html"'></p>
-  					</form>
-  					</center>
-
-
-
+    <div align="center">
+        <form action="#" th:action="@{/}" method="post">
+            <p>Welcome to Shelfish</p>
+            <p><input type="text" maxlength="25" size="20" name="login" placeholder ="login" id = "username"/></p>
+            <p><input type="password" maxlength="25" size="20" name="password" placeholder ="password" id = "password"/></p>
+            <p><input type="button" value="Login"/></p>
+        </form>
+    </div>
 
 </html>
