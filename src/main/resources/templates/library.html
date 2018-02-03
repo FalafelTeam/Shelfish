@@ -80,11 +80,48 @@ th {
     background-color: #4CAF50;
     color: white;
 }
+.container {
+    overflow: scroll;
+}
+
+
+
+ul {
+ list-style-type: none;
+ margin: 0;
+ padding: 0;
+ overflow: hidden;
+ background-color: #4CAF50;
+ font-family: Arial;
+ font-size: 20px;
+}
+
+li {
+ float: left;
+}
+
+li a {
+ display: block;
+ color: white;
+ text-align: center;
+ padding: 14px 16px;
+ text-decoration: none;
+}
+
+li a:hover {
+ background-color: rgb(53,167,110);
+}
+.active {
+ background-color: #FF0000;
+}
 
 
   </style>
 
-
+  <ul>
+    <li><a href="library.html">Search</a></li>
+    <li style="float:right"><a class="active" href="index.html">Exit</a></li>
+  </ul>
         <h2><font size="5" face="Arial" color = #4CAF50>Search</h2>
          <form action="handler.php" method="post" accept-charset="utf-8">
                <select name="mediatype" style="width: 120px;" id="FilterMedia">
@@ -107,8 +144,10 @@ th {
 
 
 
-         <div style="overflow-x:auto;">
+
          <body>
+
+         <div class="container">
          <table>
       <tr>
          <th>Title</th>
@@ -119,16 +158,15 @@ th {
          <th>Copies</th>
       </tr>
       <tr>
-         <td>Java for Android</td>
-         <td>2018</td>
-         <td>kek</td>
-         <td>kek</td>
+         <td><a href="book.html">Harry Potter and the philosopher's stone</a></td>
+         <td>1997</td>
+         <td>J.K.Rowling</td>
+         <td>Innopolis</td>
          <td>Books</td>
          <td>1</td>
       </tr>
 </table>
-
-</body>
 </div>
+</body>
 
 </html>
