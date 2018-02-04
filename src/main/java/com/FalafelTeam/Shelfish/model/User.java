@@ -24,6 +24,8 @@ public class User {
     @Getter private String phoneNumber;
     ArrayList<Document> documents;
 
+    public User() {}
+
     public User(String name, String type, String login, String password, String phoneNumber, String address){
         this.name=name;
         this.type=type;

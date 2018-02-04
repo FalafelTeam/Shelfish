@@ -3,7 +3,7 @@ package com.FalafelTeam.Shelfish;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages={"com.FalafelTeam.Shelfish.controller","com.FalafelTeam.Shelfish.model", "com.FalafelTeam.Shelfish.repository"})
 public class ShelfishApplication {
 
 	public static void main(String[] args) {
