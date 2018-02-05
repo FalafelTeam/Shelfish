@@ -9,6 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.ArrayList;
 
+/**
+ * class that represents a type
+ */
 @Entity
 public class Type {
     @Id
@@ -20,10 +23,4 @@ public class Type {
     public Type(String type){
         this.type = type;
     }
-
-    // тут особая стратегия. Нужно, чтобы этим классом пользовались, по сути, только когда хотят добавить новый тип документа. Где-то в программе нужно
-    // создать сразу три базовых типа документа.
-    // id 0 - book
-    // id 1 - article
-    // id 2 - journal
 }

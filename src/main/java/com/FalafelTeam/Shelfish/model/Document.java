@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 
-
+/**
+ * class that represents a document
+ */
 @Entity
 public class Document {
 
@@ -33,39 +35,47 @@ public class Document {
     @ManyToOne
     @Getter @Setter Type type;
 
-    public Document(String name, int price, boolean isReference, boolean isBestseller, int edition, Author author){
-        queue = new LinkedList<>();
-        authors = new ArrayList<>();            // Книга (type 0)
-        takenBy = new ArrayList<>();
-        this.name=name;
-        this.price=price;
-        this.isReference=isReference;
-        this.isBestseller=isBestseller;
-        this.authors.add(author);
-        this.edition = edition;
-        this.type=new Type("book");
-    }
-    public Document(String name, int price, boolean isReference, boolean isBestseller, Publisher publisher){
-        queue = new LinkedList<>();
-        authors = new ArrayList<>();
-        takenBy = new ArrayList<>();            // Статья (Type 1)
+    public Document(String name, int price, boolean isReference, boolean isBestseller, int edition, Publisher publisher, ArrayList<Author> authors){
+        this.queue = new LinkedList<>();
+        this.authors = new ArrayList<>();            // Book (type 0)
+        this.takenBy = new ArrayList<>();
         this.name=name;
         this.price=price;
         this.isReference=isReference;
         this.isBestseller=isBestseller;
         this.publisher = publisher;
-        this.type=new Type("article");
+        for (int i = 0; i < authors.size(); i++) {
+            this.addAuthor(authors.get(i));
+        }
+        this.edition = edition;
+        this.type=new Type("book");
     }
-    public Document(String name, int price, boolean isReference, boolean isBestseller, Editor editor){
-        queue = new LinkedList<>();
-        authors = new ArrayList<>();
-        takenBy = new ArrayList<>();            // Журнал (type 2)
+
+    public Document(String name, int price, boolean isReference, boolean isBestseller, Publisher publisher, Editor editor){
+        this.queue = new LinkedList<>();
+        this.authors = new ArrayList<>();
+        this.takenBy = new ArrayList<>();            // Article (Type 1)
         this.name=name;
         this.price=price;
         this.isReference=isReference;
         this.isBestseller=isBestseller;
+        this.publisher = publisher;
         this.editor = editor;
-        this.type=new Type("journal");
+        this.type=new Type("article");
+    }
+
+    public Document(String name, int price, boolean isReference, boolean isBestseller, ArrayList<Author> authors){
+        this.queue = new LinkedList<>();
+        this.authors = new ArrayList<>();
+        this.takenBy = new ArrayList<>();            // AV Material (type 2)
+        this.name=name;
+        this.price=price;
+        this.isReference=isReference;
+        this.isBestseller=isBestseller;
+        for (int i = 0; i < authors.size(); i++) {
+            this.addAuthor(authors.get(i));
+        }
+        this.type=new Type("avmaterial");
     }
 
     public void incrementcopies(){
@@ -82,14 +92,7 @@ public class Document {
         queue.add(user);
     }
 
-    public void removeFromQueue() throws Exception { //удаляет без возвращения юзера
-        if(queue.size()>0) {
-            queue.remove();
-        }
-        else throw new Exception("No users in a queue");
-    }
-
-    public User returnFromQueue() throws Exception { //удаляет с возвращением юзера
+    public User returnFromQueue() throws Exception {
         if(queue.size()>0) {
             return queue.remove();
         }

@@ -6,6 +6,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 
+/**
+ * class that represents an editor
+ */
 @Entity
 public class Editor {
     @Id

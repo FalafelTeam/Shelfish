@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * class that handles http requests at "/"
+ */
 @Controller
 @RequestMapping("/")
 public class IndexController {
@@ -17,32 +20,42 @@ public class IndexController {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * method that handles get requests for the page
+     * @param model is a model used to represent the page and its attributes
+     * @return html page with the login form
+     */
     @GetMapping
     public String indexForm(Model model) {
         model.addAttribute("signin", new SignInData());
         return "index";
     }
 
+    /**
+     * method that handles post requests for the page
+     * @param signin is an object that contains all data needed to login user
+     * @return redirect to the library page if the user is a librarian, redirect to initial page otherwise
+     */
     @PostMapping
-    public String indexSubmit(@ModelAttribute SignInData signin, Model model) {
-        System.out.println(signin.getLogin());
+    public String indexSubmit(@ModelAttribute SignInData signin) {
         User found = userRepository.findUserByLoginAndPassword(signin.getLogin(), signin.getPassword());
         if (found == null) {
-            model.addAttribute("signin", new SignInData());
-            return "index";
+            return "redirect:/";
         } else {
             if (found.getType().equals("librarian")) {
-                return "library";
+                return "redirect:/library";
             }
             else {
-                model.addAttribute("signin", new SignInData());
-                return "index";
+                return "redirect:/";
             }
         }
     }
 
 }
 
+/**
+ * class that contains data needed to login user
+ */
 class SignInData {
 
     private String login;

@@ -9,6 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.ArrayList;
 
+/**
+ * class that represents author
+ */
 @Entity
 public class Author {
 

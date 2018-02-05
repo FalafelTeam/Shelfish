@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * class that represents a user
+ */
 @Entity
 public class User {
 
@@ -52,6 +55,7 @@ public class User {
             throw new Exception("Too short password");
         }
     }
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber; //надо бы добавить проверочку на то, что введенная строка состоит только из цифр и возможно плюса
     }
