@@ -32,6 +32,7 @@ public class Document {
     public ArrayList<User> takenBy;
     @Getter @Setter private int price;
     @Getter @Setter private boolean isReference;
+    @Getter @Setter String image;
     @ManyToOne
     @Getter @Setter Type type;
 
