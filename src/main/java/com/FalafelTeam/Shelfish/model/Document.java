@@ -33,6 +33,7 @@ public class Document {
     @Getter @Setter private int price;
     @Getter @Setter private boolean isReference;
     @Getter @Setter String type;
+    @Getter @Setter String image;
 
     public Document() {
         this.queue = new LinkedList<>();

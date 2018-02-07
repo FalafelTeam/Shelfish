@@ -19,51 +19,40 @@
         text-decoration: none;
         padding: .8em 1em calc(.8em + 3px);
         border-radius: 3px;
-        background: #4CAF50;
-        box-shadow: 0 -3px rgb(53,167,110) inset;
+        background: #5A91C2;
+        box-shadow: 0 -3px rgb(41, 93, 139) inset;
         transition: 0.2s;
         font-size:15px;
     }
-    input[type=submit]:hover { background: rgb(53, 167, 110); }
+    input[type=submit]:hover { background: rgb(41, 93, 139); }
     input[type=submit]:active {
-        background: rgb(33,147,90);
-        box-shadow: 0 3px rgb(33,147,90) inset;
-    }
-    input[type=button] {
-        font-weight: 700;
-        color: white;
-        text-decoration: none;
-        padding: .8em 1em calc(.8em + 3px);
-        border-radius: 3px;
-        background: #4CAF50;
-        box-shadow: 0 -3px rgb(53,167,110) inset;
-        transition: 0.2s;
-        font-size:15px;
-    }
-    input[type=button]:hover { background: rgb(53, 167, 110); }
-    input[type=button]:active {
-        background: rgb(33,147,90);
-        box-shadow: 0 3px rgb(33,147,90) inset;
+        background: rgb(41, 93, 139);
+        box-shadow: 0 3px rgb(41, 93, 139) inset;
     }
     input[type=password] {
         padding: 3px;
         font-size: 15px;
-        border: solid #4CAF50;
+        border: solid #5A91C2;
         -webkit-border-radius: 3px;
         border-radius: 5px;
     }
     input[type=text] {
         padding:3px;
         font-size:15px;
-        border: solid #4CAF50;
+        border: solid #5A91C2;
         -webkit-border-radius: 3px;
         border-radius: 5px;
     }
+		.log{
+			font-size: 60px;
+			font-family: Arial;
+			color : #5A91C2;
+		}
 </style>
 
 <div align="center">
     <form action="#" th:action="@{/}" th:object="${signin}" method="post">
-        <p>Welcome to Shelfish</p>
+        <p class="log">Welcome to Shelfish</p>
         <p><input type="text"  th:field="*{login}" maxlength="25" size="20" placeholder ="login"/></p>
         <p><input type="password" th:field="*{password}" maxlength="25" size="20" placeholder ="password"/></p>
         <p><input type="submit" value="Login"/></p>
