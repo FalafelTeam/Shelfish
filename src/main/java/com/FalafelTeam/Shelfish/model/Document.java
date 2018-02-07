@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * class that represents a document
@@ -23,13 +24,16 @@ public class Document {
     @Getter @Setter private int edition;
     @Getter @Setter private Date publicationDate;
     @Getter @Setter private boolean isBestseller;
-    private LinkedList<DocumentUser> queue;
+    @ElementCollection
+    private List<DocumentUser> queue;
     @ManyToOne
     @Getter @Setter private Publisher publisher;
     @ManyToOne
     @Getter @Setter private Editor editor;
-    private LinkedList<Author> authors;
-    public LinkedList<DocumentUser> takenBy;
+    @ElementCollection
+    private List<Author> authors;
+    @ElementCollection
+    public List<DocumentUser> takenBy;
     @Getter @Setter private int price;
     @Getter @Setter private boolean isReference;
     @Getter @Setter String type;
@@ -41,7 +45,7 @@ public class Document {
         this.takenBy = new LinkedList<>();
     }
 
-    public Document(String name, int price, boolean isReference, boolean isBestseller, int edition, Publisher publisher, ArrayList<Author> authors){
+    public Document(String name, int price, boolean isReference, boolean isBestseller, int edition, Publisher publisher, ArrayList<Author> authors, String image){
         this.queue = new LinkedList<>();
         this.authors = new LinkedList<>();            // Book (type 0)
         this.takenBy = new LinkedList<>();
@@ -55,14 +59,15 @@ public class Document {
         }
         this.edition = edition;
         this.type = "book";
+        this.image = image;
     }
 
-    public Document(String name, int price, boolean isReference, boolean isBestseller, int edition, Publisher publisher, Author author) {
-        this(name, price, isReference, isBestseller, edition, publisher, new ArrayList<Author>());
+    public Document(String name, int price, boolean isReference, boolean isBestseller, int edition, Publisher publisher, Author author, String image) {
+        this(name, price, isReference, isBestseller, edition, publisher, new ArrayList<Author>(), image);
         this.addAuthor(author);
     }
 
-    public Document(String name, int price, boolean isReference, boolean isBestseller, Publisher publisher, Editor editor){
+    public Document(String name, int price, boolean isReference, boolean isBestseller, Publisher publisher, Editor editor, String image){
         this.queue = new LinkedList<>();
         this.authors = new LinkedList<>();
         this.takenBy = new LinkedList<>();            // Article (Type 1)
@@ -73,9 +78,10 @@ public class Document {
         this.publisher = publisher;
         this.editor = editor;
         this.type = "article";
+        this.image = image;
     }
 
-    public Document(String name, int price, boolean isReference, boolean isBestseller, ArrayList<Author> authors){
+    public Document(String name, int price, boolean isReference, boolean isBestseller, ArrayList<Author> authors, String image){
         this.queue = new LinkedList<>();
         this.authors = new LinkedList<>();
         this.takenBy = new LinkedList<>();            // AV Material (type 2)
@@ -87,6 +93,7 @@ public class Document {
             this.addAuthor(authors.get(i));
         }
         this.type = "avmaterial";
+        this.image = image;
     }
 
     public void incrementcopies(){
@@ -103,18 +110,7 @@ public class Document {
     }
 
     public LinkedList<DocumentUser> getQueue() {
-        return queue;
-    }
-
-    public DocumentUser returnFromQueue() throws Exception {
-        if(queue.size()>0) {
-            return queue.remove();
-        }
-        else throw new Exception("No users in a queue");
-    }
-
-    public DocumentUser peekQueue(){
-        return queue.peek();
+        return (LinkedList<DocumentUser>) queue;
     }
 
     public int getQueueSize(){
@@ -122,7 +118,7 @@ public class Document {
     }
 
     public LinkedList<Author> getAuthors() {
-        return authors;
+        return (LinkedList<Author>) authors;
     }
 
     public void addAuthor(Author author){

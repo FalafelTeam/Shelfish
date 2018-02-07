@@ -3,12 +3,10 @@ package com.FalafelTeam.Shelfish.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -26,7 +24,8 @@ public class User {
     @Getter private String password;
     @Getter @Setter private String address;
     @Getter private String phoneNumber;
-    public ArrayList<DocumentUser> documents;
+    @ElementCollection
+    public List<DocumentUser> documents;
 
     public User() {
         this.documents = new ArrayList<DocumentUser>();

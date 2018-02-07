@@ -35,7 +35,7 @@ public class ShelfishApplicationTests {
 		publisherRepository.save(publisher);
 		Author author = new Author("testauthor");
 		authorRepository.save(author);
-		Document book = new Document("testbook", 0, false, false, 0, publisher, author);
+		Document book = new Document("testbook", 0, false, false, 0, publisher, author, "");
 		book.setCopies(2);
 		documentRepository.save(book);
 		User patron = new User("testpatron", "student", "testpatron", "test", "", "");

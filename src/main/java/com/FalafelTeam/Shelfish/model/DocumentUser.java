@@ -19,7 +19,6 @@ public class DocumentUser {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
     @OneToOne
-    @JoinColumn
     @Getter Document document;
     @OneToOne
     @JoinColumn

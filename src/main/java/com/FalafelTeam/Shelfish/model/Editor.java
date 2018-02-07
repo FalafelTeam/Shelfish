@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * class that represents an editor
@@ -15,7 +16,8 @@ public class Editor {
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Getter private Integer id;
     @Getter @Setter private String name;
-    ArrayList<Document> documents;
+    @ElementCollection
+    List<Document> documents;
 
     public Editor() {
         documents = new ArrayList<Document>();
