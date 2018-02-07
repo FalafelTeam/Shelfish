@@ -40,15 +40,15 @@ public class Document {
     @Getter @Setter String image;
 
     public Document() {
-        this.queue = new LinkedList<>();
-        this.authors = new LinkedList<>();
-        this.takenBy = new LinkedList<>();
+        this.queue = new LinkedList<DocumentUser>();
+        this.authors = new LinkedList<Author>();
+        this.takenBy = new LinkedList<DocumentUser>();
     }
 
     public Document(String name, int price, boolean isReference, boolean isBestseller, int edition, Publisher publisher, ArrayList<Author> authors, String image){
-        this.queue = new LinkedList<>();
-        this.authors = new LinkedList<>();            // Book (type 0)
-        this.takenBy = new LinkedList<>();
+        this.queue = new LinkedList<DocumentUser>();
+        this.authors = new LinkedList<Author>();            // Book (type 0)
+        this.takenBy = new LinkedList<DocumentUser>();
         this.name=name;
         this.price=price;
         this.isReference=isReference;
@@ -68,9 +68,9 @@ public class Document {
     }
 
     public Document(String name, int price, boolean isReference, boolean isBestseller, Publisher publisher, Editor editor, String image){
-        this.queue = new LinkedList<>();
-        this.authors = new LinkedList<>();
-        this.takenBy = new LinkedList<>();            // Article (Type 1)
+        this.queue = new LinkedList<DocumentUser>();
+        this.authors = new LinkedList<Author>();
+        this.takenBy = new LinkedList<DocumentUser>();            // Article (Type 1)
         this.name=name;
         this.price=price;
         this.isReference=isReference;
@@ -82,9 +82,9 @@ public class Document {
     }
 
     public Document(String name, int price, boolean isReference, boolean isBestseller, ArrayList<Author> authors, String image){
-        this.queue = new LinkedList<>();
-        this.authors = new LinkedList<>();
-        this.takenBy = new LinkedList<>();            // AV Material (type 2)
+        this.queue = new LinkedList<DocumentUser>();
+        this.authors = new LinkedList<Author>();
+        this.takenBy = new LinkedList<DocumentUser>();            // AV Material (type 2)
         this.name=name;
         this.price=price;
         this.isReference=isReference;
@@ -109,16 +109,16 @@ public class Document {
         queue.add(documentUser);
     }
 
-    public LinkedList<DocumentUser> getQueue() {
-        return (LinkedList<DocumentUser>) queue;
+    public List<DocumentUser> getQueue() {
+        return queue;
     }
 
     public int getQueueSize(){
         return queue.size();
     }
 
-    public LinkedList<Author> getAuthors() {
-        return (LinkedList<Author>) authors;
+    public List<Author> getAuthors() {
+        return authors;
     }
 
     public void addAuthor(Author author){

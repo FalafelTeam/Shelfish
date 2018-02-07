@@ -25,14 +25,14 @@ public class DocumentUser {
     @Getter User user;
     @Getter Date date;
     @Getter @Setter Date dueDate;
-    public DateFormat dateFormat;
     @Getter String status; // "new" (not taken) / "taken" / "outstanding" / "renewed"
 
     public DocumentUser() {
     }
 
     public DocumentUser(Document document, User user, Date date, Boolean isOutstanding) {
-        this.dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         this.document = document;
         this.user=user;
         this.date = new Date();

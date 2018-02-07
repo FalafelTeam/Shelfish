@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.ListIterator;
 
 @Service
 public class BookingSystemManager {
@@ -49,8 +51,10 @@ public class BookingSystemManager {
         documentUserRepository.save(documentUser);
 
         document.addToQueue(documentUser);
+        documentRepository.save(document);
 
         user.documents.add(documentUser);
+        userRepository.save(user);
     }
 
     /**
@@ -77,12 +81,28 @@ public class BookingSystemManager {
     public void checkOutDocument(Document document, User patron, User librarian) throws Exception {
 
         if (librarian.getType().equals("librarian")) {
-            DocumentUser found = documentUserRepository.findByUserAndDocument(patron, document);
-            if (document.getQueue().contains(found)) {
+            /*DocumentUser found = documentUserRepository.findByUserAndDocument(patron, document);
+            System.out.println(document.getQueue().size());
+            System.out.println(document.getQueue().contains(found));*/
+            ListIterator<DocumentUser> iterator = document.getQueue().listIterator();
+            DocumentUser found;
+            while (iterator.hasNext()) {
+                found = iterator.next();
+                if (found.getDocument().equals(document) && found.getUser().equals(patron)) {
+                    document.getQueue().remove(found);
+                    document.takenBy.add(found);
+                    documentRepository.save(document);
+                    found.setStatus("taken");
+                    documentUserRepository.save(found);
+                } else throw new Exception("The user is not in the queue for the book");
+            }
+            /*if (document.getQueue().contains(found)) {
                 document.getQueue().remove(found);
                 document.takenBy.add(found);
+                documentRepository.save(document);
                 found.setStatus("taken");
-            } else throw new Exception("The user is not in the queue for the book");
+                documentUserRepository.save(found);
+            } else throw new Exception("The user is not in the queue for the book");*/
         } else throw new Exception("Permission denied");
     }
 }
