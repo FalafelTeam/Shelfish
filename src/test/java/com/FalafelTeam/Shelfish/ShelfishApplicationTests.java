@@ -30,7 +30,6 @@ public class ShelfishApplicationTests {
 	public void testCase1() throws Exception {
 
 		// initial state
-
 		Publisher publisher = new Publisher("testpublisher");
 		publisherRepository.save(publisher);
 		Author author = new Author("testauthor");
@@ -47,7 +46,7 @@ public class ShelfishApplicationTests {
 		manager.bookDocument(book, patron, false);
 		manager.checkOutDocument(book, patron, librarian);
 
-		//check conditions
+		// check conditions
 		if (patron.documents.contains(documentUserRepository.findByUserAndDocument(patron, book))) {
 			if (book.availableCopies() == 1) {
 				System.out.println("OK");
@@ -58,11 +57,23 @@ public class ShelfishApplicationTests {
 			System.out.println("The book isn't in the list of the patron's documents");
 		}
 
-		//deleting all created files from the database
-		publisherRepository.deleteAll();
+		// deleting all created files from the database
+		/*publisherRepository.deleteAll();
 		authorRepository.deleteAll();
 		documentRepository.deleteAll();
-		userRepository.deleteAll();
+		userRepository.deleteAll();*/
+	}
+
+	@Test
+	public void testCase2() {
+
+		// initial state is the same as at the end of testCase1
+
+		// test case
+		Author found = authorRepository.findByName("author");
+		if (found == null) {
+			System.out.println("No such author found");
+		}
 	}
 
 }
