@@ -3,23 +3,27 @@ package com.FalafelTeam.Shelfish.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * class that represents author
  */
 @Entity
-public class Author {
+public class Author implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Getter private Integer id;
     @Getter @Setter private String name;
-    private ArrayList<Document> documents;
+    @ElementCollection
+    private List<Document> documents;
+
+    public Author() {
+        documents = new ArrayList<>();
+    }
 
     public Author(String name){
         this.name=name;

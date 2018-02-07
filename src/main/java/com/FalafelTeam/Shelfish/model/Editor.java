@@ -17,7 +17,12 @@ public class Editor {
     @Getter @Setter private String name;
     ArrayList<Document> documents;
 
+    public Editor() {
+        documents = new ArrayList<Document>();
+    }
+
     public Editor(String name){
+        documents = new ArrayList<Document>();
         this.name=name;
     }
 }

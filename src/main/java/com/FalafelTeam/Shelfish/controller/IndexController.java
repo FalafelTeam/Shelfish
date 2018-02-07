@@ -43,9 +43,11 @@ public class IndexController {
             return "redirect:/";
         } else {
             if (found.getType().equals("librarian")) {
-                return "redirect:/library";
+                return "redirect:/librarian";
             }
-            else {
+            else if (found.getType().equals("student") || found.getType().equals("faculty")){
+                return "redirect:/library";
+            } else {
                 return "redirect:/";
             }
         }

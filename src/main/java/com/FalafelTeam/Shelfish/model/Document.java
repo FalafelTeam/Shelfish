@@ -23,22 +23,27 @@ public class Document {
     @Getter @Setter private int edition;
     @Getter @Setter private Date publicationDate;
     @Getter @Setter private boolean isBestseller;
-    private LinkedList<User> queue;
+    private LinkedList<DocumentUser> queue;
     @ManyToOne
     @Getter @Setter private Publisher publisher;
     @ManyToOne
     @Getter @Setter private Editor editor;
-    private ArrayList<Author> authors;
-    public ArrayList<User> takenBy;
+    private LinkedList<Author> authors;
+    public LinkedList<DocumentUser> takenBy;
     @Getter @Setter private int price;
     @Getter @Setter private boolean isReference;
-    @ManyToOne
-    @Getter @Setter Type type;
+    @Getter @Setter String type;
+
+    public Document() {
+        this.queue = new LinkedList<>();
+        this.authors = new LinkedList<>();
+        this.takenBy = new LinkedList<>();
+    }
 
     public Document(String name, int price, boolean isReference, boolean isBestseller, int edition, Publisher publisher, ArrayList<Author> authors){
         this.queue = new LinkedList<>();
-        this.authors = new ArrayList<>();            // Book (type 0)
-        this.takenBy = new ArrayList<>();
+        this.authors = new LinkedList<>();            // Book (type 0)
+        this.takenBy = new LinkedList<>();
         this.name=name;
         this.price=price;
         this.isReference=isReference;
@@ -48,26 +53,31 @@ public class Document {
             this.addAuthor(authors.get(i));
         }
         this.edition = edition;
-        this.type=new Type("book");
+        this.type = "book";
+    }
+
+    public Document(String name, int price, boolean isReference, boolean isBestseller, int edition, Publisher publisher, Author author) {
+        this(name, price, isReference, isBestseller, edition, publisher, new ArrayList<Author>());
+        this.addAuthor(author);
     }
 
     public Document(String name, int price, boolean isReference, boolean isBestseller, Publisher publisher, Editor editor){
         this.queue = new LinkedList<>();
-        this.authors = new ArrayList<>();
-        this.takenBy = new ArrayList<>();            // Article (Type 1)
+        this.authors = new LinkedList<>();
+        this.takenBy = new LinkedList<>();            // Article (Type 1)
         this.name=name;
         this.price=price;
         this.isReference=isReference;
         this.isBestseller=isBestseller;
         this.publisher = publisher;
         this.editor = editor;
-        this.type=new Type("article");
+        this.type = "article";
     }
 
     public Document(String name, int price, boolean isReference, boolean isBestseller, ArrayList<Author> authors){
         this.queue = new LinkedList<>();
-        this.authors = new ArrayList<>();
-        this.takenBy = new ArrayList<>();            // AV Material (type 2)
+        this.authors = new LinkedList<>();
+        this.takenBy = new LinkedList<>();            // AV Material (type 2)
         this.name=name;
         this.price=price;
         this.isReference=isReference;
@@ -75,7 +85,7 @@ public class Document {
         for (int i = 0; i < authors.size(); i++) {
             this.addAuthor(authors.get(i));
         }
-        this.type=new Type("avmaterial");
+        this.type = "avmaterial";
     }
 
     public void incrementcopies(){
@@ -87,19 +97,22 @@ public class Document {
             this.copies--;
         } else throw new Exception("Cannot be less than one");
     }
-
-    public void addToQueue(User user){
-        queue.add(user);
+    public void addToQueue(DocumentUser documentUser){
+        queue.add(documentUser);
     }
 
-    public User returnFromQueue() throws Exception {
+    public LinkedList<DocumentUser> getQueue() {
+        return queue;
+    }
+
+    public DocumentUser returnFromQueue() throws Exception {
         if(queue.size()>0) {
             return queue.remove();
         }
         else throw new Exception("No users in a queue");
     }
 
-    public User peekQueue(){
+    public DocumentUser peekQueue(){
         return queue.peek();
     }
 
@@ -107,7 +120,7 @@ public class Document {
         return queue.size();
     }
 
-    public ArrayList<Author> getAuthors() {
+    public LinkedList<Author> getAuthors() {
         return authors;
     }
 
@@ -115,5 +128,8 @@ public class Document {
         this.authors.add(author);
     }
 
+    public int availableCopies() {
+        return copies - takenBy.size();
+    }
 }
 

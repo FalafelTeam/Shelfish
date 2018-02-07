@@ -2,6 +2,7 @@ package com.FalafelTeam.Shelfish.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.access.method.P;
 
 import javax.persistence.*;
 import java.text.DateFormat;
@@ -18,19 +19,29 @@ public class DocumentUser {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
     @OneToOne
+    @JoinColumn
     @Getter Document document;
     @OneToOne
+    @JoinColumn
     @Getter User user;
     @Getter Date date;
     @Getter @Setter Date dueDate;
     public DateFormat dateFormat;
     @Getter String status; // "new" (not taken) / "taken" / "outstanding" / "renewed"
 
-    public DocumentUser(Document document, User user, Date date, String Status){
-        this.dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    public DocumentUser() {
+    }
+
+    public DocumentUser(Document document, User user, Date date, Boolean isOutstanding) {
+        this.dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         this.document = document;
         this.user=user;
         this.date = new Date();
+        if (isOutstanding) {
+            this.status = "outstanding";
+        } else {
+            this.status = "new";
+        }
     }
 
     public void setStatus(String status) throws Exception {

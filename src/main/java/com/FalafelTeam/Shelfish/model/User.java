@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -25,9 +26,11 @@ public class User {
     @Getter private String password;
     @Getter @Setter private String address;
     @Getter private String phoneNumber;
-    ArrayList<Document> documents;
+    public ArrayList<DocumentUser> documents;
 
-    public User() {}
+    public User() {
+        this.documents = new ArrayList<DocumentUser>();
+    }
 
     public User(String name, String type, String login, String password, String phoneNumber, String address){
         this.name=name;
@@ -36,6 +39,7 @@ public class User {
         this.password=password;
         this.phoneNumber=phoneNumber;
         this.address=address;
+        this.documents = new ArrayList<DocumentUser>();
     }
 
     public void setType(String type) throws Exception {

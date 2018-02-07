@@ -1,6 +1,8 @@
 package com.FalafelTeam.Shelfish.repository;
 
+import com.FalafelTeam.Shelfish.model.Document;
 import com.FalafelTeam.Shelfish.model.DocumentUser;
+import com.FalafelTeam.Shelfish.model.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface DocumentUserRepository extends CrudRepository<DocumentUser, Long> {
+
+    DocumentUser findByUserAndDocument(User user, Document document);
 }
