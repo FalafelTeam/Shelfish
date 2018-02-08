@@ -40,7 +40,7 @@ public class BookingSystemManager {
         if (document.getType().equals("book")) {
             if (user.getType().equals("faculty")) {
                 documentUser.setDueDate(addWeeks(documentUser.getDate(), 4));
-            } else if (document.isBestseller()) {
+            } else if (document.getIsBestseller()) {
                 documentUser.setDueDate(addWeeks(documentUser.getDate(), 2));
             } else {
                 documentUser.setDueDate(addWeeks(documentUser.getDate(), 3));
@@ -53,7 +53,7 @@ public class BookingSystemManager {
         document.addToQueue(documentUser);
         documentRepository.save(document);
 
-        user.documents.add(documentUser);
+        user.getDocuments().add(documentUser);
         userRepository.save(user);
     }
 
@@ -81,28 +81,14 @@ public class BookingSystemManager {
     public void checkOutDocument(Document document, User patron, User librarian) throws Exception {
 
         if (librarian.getType().equals("librarian")) {
-            /*DocumentUser found = documentUserRepository.findByUserAndDocument(patron, document);
-            System.out.println(document.getQueue().size());
-            System.out.println(document.getQueue().contains(found));*/
-            ListIterator<DocumentUser> iterator = document.getQueue().listIterator();
-            DocumentUser found;
-            while (iterator.hasNext()) {
-                found = iterator.next();
-                if (found.getDocument().equals(document) && found.getUser().equals(patron)) {
-                    document.getQueue().remove(found);
-                    document.takenBy.add(found);
-                    documentRepository.save(document);
-                    found.setStatus("taken");
-                    documentUserRepository.save(found);
-                } else throw new Exception("The user is not in the queue for the book");
-            }
-            /*if (document.getQueue().contains(found)) {
+            DocumentUser found = documentUserRepository.findByUserAndDocument(patron, document);
+            if (document.queueContains(found)) {
                 document.getQueue().remove(found);
-                document.takenBy.add(found);
+                document.getTakenBy().add(found);
                 documentRepository.save(document);
                 found.setStatus("taken");
                 documentUserRepository.save(found);
-            } else throw new Exception("The user is not in the queue for the book");*/
+            } else throw new Exception("The user is not in the queue for the book");
         } else throw new Exception("Permission denied");
     }
 }

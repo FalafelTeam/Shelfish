@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * class that represents author
@@ -19,7 +20,7 @@ public class Author implements Serializable {
     @Getter private Integer id;
     @Getter @Setter private String name;
     @ElementCollection
-    private List<Document> documents;
+    @Getter private List<Document> documents;
 
     public Author() {
         documents = new ArrayList<>();
@@ -29,10 +30,24 @@ public class Author implements Serializable {
         this.name=name;
         documents = new ArrayList<>();
     }
+
     public void addDocument(Document document){
         documents.add(document);
     }
-    public int numOfDocs(){
+
+    public Integer numOfDocs(){
         return documents.size();
+    }
+
+    public Boolean documentsContain(Document document) {
+        ListIterator<Document> iterator = documents.listIterator();
+        Document found;
+        while (iterator.hasNext()) {
+            found = iterator.next();
+            if (found.getId().equals(document.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

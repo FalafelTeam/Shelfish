@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * class that represents an editor
@@ -17,7 +18,7 @@ public class Editor {
     @Getter private Integer id;
     @Getter @Setter private String name;
     @ElementCollection
-    List<Document> documents;
+    @Getter private List<Document> documents;
 
     public Editor() {
         documents = new ArrayList<Document>();
@@ -26,5 +27,17 @@ public class Editor {
     public Editor(String name){
         documents = new ArrayList<Document>();
         this.name=name;
+    }
+
+    public Boolean documentsContain(Document document) {
+        ListIterator<Document> iterator = documents.listIterator();
+        Document found;
+        while (iterator.hasNext()) {
+            found = iterator.next();
+            if (found.getId().equals(document.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

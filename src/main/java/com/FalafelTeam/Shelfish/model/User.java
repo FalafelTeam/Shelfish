@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Objects;
 
 /**
@@ -25,7 +26,7 @@ public class User {
     @Getter @Setter private String address;
     @Getter private String phoneNumber;
     @ElementCollection
-    public List<DocumentUser> documents;
+    @Getter private List<DocumentUser> documents;
 
     public User() {
         this.documents = new ArrayList<DocumentUser>();
@@ -61,5 +62,17 @@ public class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber; //надо бы добавить проверочку на то, что введенная строка состоит только из цифр и возможно плюса
+    }
+
+    public Boolean documentsContain(DocumentUser documentUser) {
+        ListIterator<DocumentUser> iterator = documents.listIterator();
+        DocumentUser found;
+        while (iterator.hasNext()) {
+            found = iterator.next();
+            if (found.getDocument().getId().equals(documentUser.getDocument().getId()) && found.getUser().getId().equals(documentUser.getUser().getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

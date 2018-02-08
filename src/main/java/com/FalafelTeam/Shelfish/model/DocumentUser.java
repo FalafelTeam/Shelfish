@@ -19,13 +19,12 @@ public class DocumentUser {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
     @OneToOne
-    @Getter Document document;
+    @Getter private Document document;
     @OneToOne
-    @JoinColumn
-    @Getter User user;
-    @Getter Date date;
-    @Getter @Setter Date dueDate;
-    @Getter String status; // "new" (not taken) / "taken" / "outstanding" / "renewed"
+    @Getter private User user;
+    @Getter private Date date;
+    @Getter @Setter private Date dueDate;
+    @Getter private String status; // "new" (not taken) / "taken" / "outstanding" / "renewed"
 
     public DocumentUser() {
     }

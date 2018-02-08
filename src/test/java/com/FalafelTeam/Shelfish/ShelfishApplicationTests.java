@@ -39,7 +39,7 @@ public class ShelfishApplicationTests {
 		documentRepository.save(book);
 		User patron = new User("testpatron", "student", "testpatron", "test", "", "");
 		userRepository.save(patron);
-		User librarian = new User( "testlibrarian", "librarian", "tesrlibrarian", "test", "", "");
+		User librarian = new User( "testlibrarian", "librarian", "testlibrarian", "test", "", "");
 		userRepository.save(librarian);
 
 		// test case itself
@@ -47,14 +47,17 @@ public class ShelfishApplicationTests {
 		manager.checkOutDocument(book, patron, librarian);
 
 		// check conditions
-		if (patron.documents.contains(documentUserRepository.findByUserAndDocument(patron, book))) {
+		if (documentUserRepository.findByUserAndDocument(patron, book) == null) {
+		    throw new Exception("DocumentUser relation not found");
+        }
+		if (patron.documentsContain(documentUserRepository.findByUserAndDocument(patron, book))) {
 			if (book.availableCopies() == 1) {
 				System.out.println("OK");
 			} else {
-				System.out.println("Wrong number of copies in the lbrary");
+				throw new Exception("Wrong number of copies in the lbrary");
 			}
 		} else {
-			System.out.println("The book isn't in the list of the patron's documents");
+			throw new Exception("The book isn't in the list of the patron's documents");
 		}
 
 		// deleting all created files from the database

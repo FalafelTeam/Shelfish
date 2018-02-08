@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * class that represents a document
@@ -20,24 +17,24 @@ public class Document {
     @Getter private Integer id;
     @Getter @Setter private String name;
     @Getter @Setter private String description;
-    @Getter @Setter private int copies;
-    @Getter @Setter private int edition;
+    @Getter @Setter private Integer copies;
+    @Getter @Setter private Integer edition;
     @Getter @Setter private Date publicationDate;
-    @Getter @Setter private boolean isBestseller;
+    @Getter @Setter private Boolean isBestseller;
     @ElementCollection
-    private List<DocumentUser> queue;
+    @Getter private List<DocumentUser> queue;
     @ManyToOne
     @Getter @Setter private Publisher publisher;
     @ManyToOne
     @Getter @Setter private Editor editor;
     @ElementCollection
-    private List<Author> authors;
+    @Getter private List<Author> authors;
     @ElementCollection
-    public List<DocumentUser> takenBy;
-    @Getter @Setter private int price;
-    @Getter @Setter private boolean isReference;
-    @Getter @Setter String type;
-    @Getter @Setter String image;
+    @Getter private List<DocumentUser> takenBy;
+    @Getter @Setter private Integer price;
+    @Getter @Setter private Boolean isReference;
+    @Getter @Setter private String type;
+    @Getter @Setter private String image;
 
     public Document() {
         this.queue = new LinkedList<DocumentUser>();
@@ -109,23 +106,51 @@ public class Document {
         queue.add(documentUser);
     }
 
-    public List<DocumentUser> getQueue() {
-        return queue;
-    }
-
-    public int getQueueSize(){
+    public Integer getQueueSize(){
         return queue.size();
     }
 
-    public List<Author> getAuthors() {
-        return authors;
+    public Boolean queueContains(DocumentUser documentUser) {
+        ListIterator<DocumentUser> iterator = queue.listIterator();
+        DocumentUser found;
+        while (iterator.hasNext()) {
+            found = iterator.next();
+            if (found.getUser().getId().equals(documentUser.getUser().getId()) && found.getDocument().getId().equals(documentUser.getDocument().getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addAuthor(Author author){
         this.authors.add(author);
     }
 
-    public int availableCopies() {
+    public Boolean athorsContain(Author author) {
+        ListIterator<Author> iterator = authors.listIterator();
+        Author found;
+        while (iterator.hasNext()) {
+            found = iterator.next();
+            if (found.getId().equals(author.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Boolean takenByContains(DocumentUser documentUser) {
+        ListIterator<DocumentUser> iterator = takenBy.listIterator();
+        DocumentUser found;
+        while (iterator.hasNext()) {
+            found = iterator.next();
+            if (found.getDocument().getId().equals(documentUser.getDocument().getId()) && found.getUser().getId().equals(documentUser.getUser().getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Integer availableCopies() {
         return copies - takenBy.size();
     }
 }
