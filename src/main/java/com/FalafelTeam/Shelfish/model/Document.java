@@ -21,15 +21,15 @@ public class Document {
     @Getter @Setter private Integer edition;
     @Getter @Setter private Date publicationDate;
     @Getter @Setter private Boolean isBestseller;
-    @ElementCollection
+    @ManyToMany
     @Getter private List<DocumentUser> queue;
     @ManyToOne
     @Getter @Setter private Publisher publisher;
     @ManyToOne
     @Getter @Setter private Editor editor;
-    @ElementCollection
+    @ManyToMany
     @Getter private List<Author> authors;
-    @ElementCollection
+    @ManyToMany
     @Getter private List<DocumentUser> takenBy;
     @Getter @Setter private Integer price;
     @Getter @Setter private Boolean isReference;
@@ -37,16 +37,22 @@ public class Document {
     @Getter @Setter private String image;
 
     public Document() {
+        this.copies = 0;
+        this.edition = 0;
+        this.isBestseller = false;
+        this.price = 0;
+        this.isReference = false;
         this.queue = new LinkedList<DocumentUser>();
         this.authors = new LinkedList<Author>();
         this.takenBy = new LinkedList<DocumentUser>();
     }
 
-    public Document(String name, int price, boolean isReference, boolean isBestseller, int edition, Publisher publisher, ArrayList<Author> authors, String image){
+    public Document(String name, int copies, int price, boolean isReference, boolean isBestseller, int edition, Publisher publisher, ArrayList<Author> authors, String image){
         this.queue = new LinkedList<DocumentUser>();
         this.authors = new LinkedList<Author>();            // Book (type 0)
         this.takenBy = new LinkedList<DocumentUser>();
         this.name=name;
+        this.copies = copies;
         this.price=price;
         this.isReference=isReference;
         this.isBestseller=isBestseller;
@@ -59,16 +65,17 @@ public class Document {
         this.image = image;
     }
 
-    public Document(String name, int price, boolean isReference, boolean isBestseller, int edition, Publisher publisher, Author author, String image) {
-        this(name, price, isReference, isBestseller, edition, publisher, new ArrayList<Author>(), image);
+    public Document(String name, int copies, int price, boolean isReference, boolean isBestseller, int edition, Publisher publisher, Author author, String image) {
+        this(name, copies, price, isReference, isBestseller, edition, publisher, new ArrayList<Author>(), image);
         this.addAuthor(author);
     }
 
-    public Document(String name, int price, boolean isReference, boolean isBestseller, Publisher publisher, Editor editor, String image){
+    public Document(String name, int copies, int price, boolean isReference, boolean isBestseller, Publisher publisher, Editor editor, String image){
         this.queue = new LinkedList<DocumentUser>();
         this.authors = new LinkedList<Author>();
         this.takenBy = new LinkedList<DocumentUser>();            // Article (Type 1)
         this.name=name;
+        this.copies = copies;
         this.price=price;
         this.isReference=isReference;
         this.isBestseller=isBestseller;
@@ -78,11 +85,12 @@ public class Document {
         this.image = image;
     }
 
-    public Document(String name, int price, boolean isReference, boolean isBestseller, ArrayList<Author> authors, String image){
+    public Document(String name, int copies, int price, boolean isReference, boolean isBestseller, ArrayList<Author> authors, String image){
         this.queue = new LinkedList<DocumentUser>();
         this.authors = new LinkedList<Author>();
         this.takenBy = new LinkedList<DocumentUser>();            // AV Material (type 2)
         this.name=name;
+        this.copies = copies;
         this.price=price;
         this.isReference=isReference;
         this.isBestseller=isBestseller;

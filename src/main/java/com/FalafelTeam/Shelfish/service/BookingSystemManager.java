@@ -73,7 +73,7 @@ public class BookingSystemManager {
     /**
      * method for checking out a book from the library
      * @param document document that needs to be checked out
-     * @param patron patrom that wants to check out the document
+     * @param patron patron that wants to check out the document
      * @param librarian librarian that fulfills the check out requst
      * @throws Exception "Permission denied" if the user that tries to fulfill the request is not a librarian
      *                   "The user is not in the queue for the book"
@@ -82,6 +82,9 @@ public class BookingSystemManager {
 
         if (librarian.getType().equals("librarian")) {
             DocumentUser found = documentUserRepository.findByUserAndDocument(patron, document);
+            if (found == null) {
+                throw new Exception("The document wasn't checked out by the user");
+            }
             if (document.queueContains(found)) {
                 document.getQueue().remove(found);
                 document.getTakenBy().add(found);

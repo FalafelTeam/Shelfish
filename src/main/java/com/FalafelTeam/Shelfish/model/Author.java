@@ -19,7 +19,7 @@ public class Author implements Serializable {
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Getter private Integer id;
     @Getter @Setter private String name;
-    @ElementCollection
+    @OneToMany
     @Getter private List<Document> documents;
 
     public Author() {

@@ -17,7 +17,7 @@ public class Publisher {
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Getter private Integer id;
     @Setter @Getter private String name;
-    @ElementCollection
+    @OneToMany
     @Getter private List<Document> documents;
 
     public Publisher() {

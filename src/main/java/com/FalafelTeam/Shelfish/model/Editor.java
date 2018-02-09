@@ -17,7 +17,7 @@ public class Editor {
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Getter private Integer id;
     @Getter @Setter private String name;
-    @ElementCollection
+    @OneToMany
     @Getter private List<Document> documents;
 
     public Editor() {

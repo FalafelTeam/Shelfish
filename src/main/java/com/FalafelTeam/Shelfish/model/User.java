@@ -25,7 +25,7 @@ public class User {
     @Getter private String password;
     @Getter @Setter private String address;
     @Getter private String phoneNumber;
-    @ElementCollection
+    @ManyToMany
     @Getter private List<DocumentUser> documents;
 
     public User() {
