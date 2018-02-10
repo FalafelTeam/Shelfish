@@ -44,11 +44,9 @@ public class ShelfishApplicationTests {
 
 		// test case itself
 		manager.bookDocument(book, patron, false);
-		System.out.println(book.getUsers().get(0).getStatus());
 		manager.checkOutDocument(book, patron, librarian);
 		book = documentRepository.findOne(book.getId());
-		System.out.println(book.getUsers().size());
-
+		
 		// check conditions
 		if (documentUserRepository.findByUserAndDocument(patron, book) == null) {
 		    throw new Exception("DocumentUser relation not found");
