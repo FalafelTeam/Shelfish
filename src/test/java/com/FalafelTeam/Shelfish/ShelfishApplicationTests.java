@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.concurrent.TimeUnit;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ShelfishApplicationTests {
@@ -32,13 +34,10 @@ public class ShelfishApplicationTests {
 	@Test
 	public void testCase1() throws Exception {
 
-		System.out.print("testCase1: ");
-
 		// initial state
 		Publisher publisher = modelManager.addPublisher("testpublisher");
 		Author author = modelManager.addAuthor("testauthor");
-		Document book = modelManager.addBook("testbook", 0, 0,false, false, 0, publisher, author, "");
-		modelManager.setCopies(book, 2);
+		Document book = modelManager.addBook("testbook", 2, 0,false, false, 0, publisher, author, "");
 		User patron = modelManager.addUser("testpatron", "student", "testpatron", "test", "", "");
 		User librarian = modelManager.addUser("testlibrarian", "librarian", "testlibrarian", "test", "", "");
 
@@ -46,8 +45,9 @@ public class ShelfishApplicationTests {
 		manager.bookDocument(book, patron, false);
 		manager.checkOutDocument(book, patron, librarian);
 		book = documentRepository.findOne(book.getId());
-		
-		// check conditions
+
+		// checking conditions
+		System.out.print("testCase1: ");
 		if (documentUserRepository.findByUserAndDocument(patron, book) == null) {
 		    throw new Exception("DocumentUser relation not found");
         }
@@ -69,7 +69,7 @@ public class ShelfishApplicationTests {
 	}
 
 	@Test
-	public void testCase2() {
+	public void testCase2() throws Exception {
 
 		System.out.print("testCase2: ");
 
@@ -82,4 +82,53 @@ public class ShelfishApplicationTests {
 		} else System.out.println("OK");
 	}
 
+	@Test
+	public void testCase3() throws Exception {
+
+		System.out.print("testCase3: ");
+
+		// initial state
+		Publisher publisher = modelManager.addPublisher("testpublisher3");
+		Author author = modelManager.addAuthor("testauthor3");
+		Document book = modelManager.addBook("testbook3", 1, 0,false, false, 0, publisher, author, "");
+		User faculty = modelManager.addUser("testfaculty3", "faculty", "testfaculty3", "test", "", "");
+		User student = modelManager.addUser("teststudent3", "student", "teststudent3", "test", "", "");
+		User librarian = modelManager.addUser("testlibrarian3", "librarian", "testlibrarian3", "test", "", "");
+
+		// test case
+		manager.bookDocument(book, faculty, false);
+		manager.checkOutDocument(book, faculty, librarian);
+
+		// checking conditions
+		DocumentUser found = documentUserRepository.findByUserAndDocument(faculty, book);
+		if (TimeUnit.DAYS.convert(found.getDueDate().getTime() - found.getDate().getTime(),
+				TimeUnit.MILLISECONDS) == 7 * 4) {
+			System.out.println("OK");
+		} else throw new Exception("Wrong due date");
+	}
+
+	@Test
+	public void testCase4() throws Exception {
+
+		System.out.print("testCase3: ");
+
+		// initial state
+		Publisher publisher = modelManager.addPublisher("testpublisher4");
+		Author author = modelManager.addAuthor("testauthor4");
+		Document book = modelManager.addBook("testbook4", 1, 0,false, true, 0, publisher, author, "");
+		User faculty = modelManager.addUser("testfaculty4", "faculty", "testfaculty4", "test", "", "");
+		User student = modelManager.addUser("teststudent4", "student", "teststudent4", "test", "", "");
+		User librarian = modelManager.addUser("testlibrarian4", "librarian", "testlibrarian4", "test", "", "");
+
+		// test case
+		manager.bookDocument(book, faculty, false);
+		manager.checkOutDocument(book, faculty, librarian);
+
+		// checking conditions
+		DocumentUser found = documentUserRepository.findByUserAndDocument(faculty, book);
+		if (TimeUnit.DAYS.convert(found.getDueDate().getTime() - found.getDate().getTime(),
+				TimeUnit.MILLISECONDS) == 7 * 2) {
+			System.out.println("OK");
+		} else throw new Exception("Wrong due date");
+	}
 }

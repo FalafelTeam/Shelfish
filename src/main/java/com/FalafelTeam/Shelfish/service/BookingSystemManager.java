@@ -36,10 +36,10 @@ public class BookingSystemManager {
 
         DocumentUser documentUser = new DocumentUser(document, user, new Date(), isOutstanding);
         if (document.getType().equals("book")) {
-            if (user.getType().equals("faculty")) {
-                documentUser.setDueDate(addWeeks(documentUser.getDate(), 4));
-            } else if (document.getIsBestseller()) {
+            if (document.getIsBestseller()) {
                 documentUser.setDueDate(addWeeks(documentUser.getDate(), 2));
+            } else if (user.getType().equals("faculty")) {
+                documentUser.setDueDate(addWeeks(documentUser.getDate(), 4));
             } else {
                 documentUser.setDueDate(addWeeks(documentUser.getDate(), 3));
             }
