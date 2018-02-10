@@ -37,3 +37,7 @@ nbdist/
 ### Data Bases ###
 
 *.db
+
+### Spring configuration files ###
+
+application.properties

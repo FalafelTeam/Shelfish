@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
  * interface for the DocumentRepository
  */
 @Repository
-public interface DocumentRepository extends CrudRepository<Document, Long> {
+public interface DocumentRepository extends CrudRepository<Document, Integer> {
 }

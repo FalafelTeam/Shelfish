@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.ListIterator;
 
 @Service
 public class BookingSystemManager {
@@ -86,9 +84,6 @@ public class BookingSystemManager {
                 throw new Exception("The document wasn't checked out by the user");
             }
             if (document.queueContains(found)) {
-                document.getQueue().remove(found);
-                document.getTakenBy().add(found);
-                documentRepository.save(document);
                 found.setStatus("taken");
                 documentUserRepository.save(found);
             } else throw new Exception("The user is not in the queue for the book");

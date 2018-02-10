@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
  * an actual repository is automatically created by spring
  */
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Integer> {
 
     User findUserByLoginAndPassword(String login, String password);
 }

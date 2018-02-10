@@ -21,16 +21,14 @@ public class Document {
     @Getter @Setter private Integer edition;
     @Getter @Setter private Date publicationDate;
     @Getter @Setter private Boolean isBestseller;
-    @ManyToMany
-    @Getter private List<DocumentUser> queue;
     @ManyToOne
     @Getter @Setter private Publisher publisher;
     @ManyToOne
     @Getter @Setter private Editor editor;
     @ManyToMany
     @Getter private List<Author> authors;
-    @ManyToMany
-    @Getter private List<DocumentUser> takenBy;
+    @OneToMany(fetch = FetchType.EAGER)
+    @Getter private List<DocumentUser> users;
     @Getter @Setter private Integer price;
     @Getter @Setter private Boolean isReference;
     @Getter @Setter private String type;
@@ -42,15 +40,13 @@ public class Document {
         this.isBestseller = false;
         this.price = 0;
         this.isReference = false;
-        this.queue = new LinkedList<DocumentUser>();
         this.authors = new LinkedList<Author>();
-        this.takenBy = new LinkedList<DocumentUser>();
+        this.users = new LinkedList<DocumentUser>();
     }
 
     public Document(String name, int copies, int price, boolean isReference, boolean isBestseller, int edition, Publisher publisher, ArrayList<Author> authors, String image){
-        this.queue = new LinkedList<DocumentUser>();
         this.authors = new LinkedList<Author>();            // Book (type 0)
-        this.takenBy = new LinkedList<DocumentUser>();
+        this.users = new LinkedList<DocumentUser>();
         this.name=name;
         this.copies = copies;
         this.price=price;
@@ -71,9 +67,8 @@ public class Document {
     }
 
     public Document(String name, int copies, int price, boolean isReference, boolean isBestseller, Publisher publisher, Editor editor, String image){
-        this.queue = new LinkedList<DocumentUser>();
         this.authors = new LinkedList<Author>();
-        this.takenBy = new LinkedList<DocumentUser>();            // Article (Type 1)
+        this.users = new LinkedList<DocumentUser>();            // Article (Type 1)
         this.name=name;
         this.copies = copies;
         this.price=price;
@@ -86,9 +81,8 @@ public class Document {
     }
 
     public Document(String name, int copies, int price, boolean isReference, boolean isBestseller, ArrayList<Author> authors, String image){
-        this.queue = new LinkedList<DocumentUser>();
         this.authors = new LinkedList<Author>();
-        this.takenBy = new LinkedList<DocumentUser>();            // AV Material (type 2)
+        this.users = new LinkedList<DocumentUser>();            // AV Material (type 2)
         this.name=name;
         this.copies = copies;
         this.price=price;
@@ -111,20 +105,19 @@ public class Document {
         } else throw new Exception("Cannot be less than one");
     }
     public void addToQueue(DocumentUser documentUser){
-        queue.add(documentUser);
-    }
-
-    public Integer getQueueSize(){
-        return queue.size();
+        users.add(documentUser);
     }
 
     public Boolean queueContains(DocumentUser documentUser) {
-        ListIterator<DocumentUser> iterator = queue.listIterator();
+        ListIterator<DocumentUser> iterator = users.listIterator();
         DocumentUser found;
         while (iterator.hasNext()) {
             found = iterator.next();
-            if (found.getUser().getId().equals(documentUser.getUser().getId()) && found.getDocument().getId().equals(documentUser.getDocument().getId())) {
-                return true;
+            if (found.getStatus().equals("new")) {
+                if (found.getUser().getId().equals(documentUser.getUser().getId()) &&
+                        found.getDocument().getId().equals(documentUser.getDocument().getId())) {
+                    return true;
+                }
             }
         }
         return false;
@@ -147,19 +140,35 @@ public class Document {
     }
 
     public Boolean takenByContains(DocumentUser documentUser) {
-        ListIterator<DocumentUser> iterator = takenBy.listIterator();
+        ListIterator<DocumentUser> iterator = users.listIterator();
         DocumentUser found;
         while (iterator.hasNext()) {
             found = iterator.next();
-            if (found.getDocument().getId().equals(documentUser.getDocument().getId()) && found.getUser().getId().equals(documentUser.getUser().getId())) {
-                return true;
+            if (found.getStatus().equals("taken")) {
+                if (found.getDocument().getId().equals(documentUser.getDocument().getId()) &&
+                        found.getUser().getId().equals(documentUser.getUser().getId())) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
+    public Integer takenBySize() {
+        int num = 0;
+        ListIterator<DocumentUser> iterator = users.listIterator();
+        DocumentUser found;
+        while (iterator.hasNext()) {
+            found = iterator.next();
+            if (found.getStatus().equals("taken")) {
+                num++;
+            }
+        }
+        return num;
+    }
+
     public Integer availableCopies() {
-        return copies - takenBy.size();
+        return copies - this.takenBySize();
     }
 }
 

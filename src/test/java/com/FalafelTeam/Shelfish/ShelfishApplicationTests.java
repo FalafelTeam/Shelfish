@@ -3,6 +3,7 @@ package com.FalafelTeam.Shelfish;
 import com.FalafelTeam.Shelfish.model.*;
 import com.FalafelTeam.Shelfish.repository.*;
 import com.FalafelTeam.Shelfish.service.BookingSystemManager;
+import com.FalafelTeam.Shelfish.service.ModelManager;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,26 +26,28 @@ public class ShelfishApplicationTests {
 	UserRepository userRepository;
 	@Autowired
 	BookingSystemManager manager;
+	@Autowired
+	ModelManager modelManager;
 
 	@Test
 	public void testCase1() throws Exception {
 
+		System.out.print("testCase1: ");
+
 		// initial state
-		Publisher publisher = new Publisher("testpublisher");
-		publisherRepository.save(publisher);
-		Author author = new Author("testauthor");
-		authorRepository.save(author);
-		Document book = new Document("testbook", 0, 0,false, false, 0, publisher, author, "");
-		book.setCopies(2);
-		documentRepository.save(book);
-		User patron = new User("testpatron", "student", "testpatron", "test", "", "");
-		userRepository.save(patron);
-		User librarian = new User( "testlibrarian", "librarian", "testlibrarian", "test", "", "");
-		userRepository.save(librarian);
+		Publisher publisher = modelManager.addPublisher("testpublisher");
+		Author author = modelManager.addAuthor("testauthor");
+		Document book = modelManager.addBook("testbook", 0, 0,false, false, 0, publisher, author, "");
+		modelManager.setCopies(book, 2);
+		User patron = modelManager.addUser("testpatron", "student", "testpatron", "test", "", "");
+		User librarian = modelManager.addUser("testlibrarian", "librarian", "testlibrarian", "test", "", "");
 
 		// test case itself
 		manager.bookDocument(book, patron, false);
+		System.out.println(book.getUsers().get(0).getStatus());
 		manager.checkOutDocument(book, patron, librarian);
+		book = documentRepository.findOne(book.getId());
+		System.out.println(book.getUsers().size());
 
 		// check conditions
 		if (documentUserRepository.findByUserAndDocument(patron, book) == null) {
@@ -54,7 +57,7 @@ public class ShelfishApplicationTests {
 			if (book.availableCopies() == 1) {
 				System.out.println("OK");
 			} else {
-				throw new Exception("Wrong number of copies in the lbrary");
+				throw new Exception("Wrong number of copies in the library");
 			}
 		} else {
 			throw new Exception("The book isn't in the list of the patron's documents");
@@ -70,13 +73,15 @@ public class ShelfishApplicationTests {
 	@Test
 	public void testCase2() {
 
+		System.out.print("testCase2: ");
+
 		// initial state is the same as at the end of testCase1
 
 		// test case
 		Author found = authorRepository.findByName("author");
 		if (found == null) {
 			System.out.println("No such author found");
-		}
+		} else System.out.println("OK");
 	}
 
 }

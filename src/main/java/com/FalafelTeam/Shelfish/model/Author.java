@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -13,7 +12,7 @@ import java.util.ListIterator;
  * class that represents author
  */
 @Entity
-public class Author implements Serializable {
+public class Author {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -29,14 +28,6 @@ public class Author implements Serializable {
     public Author(String name){
         this.name=name;
         documents = new ArrayList<>();
-    }
-
-    public void addDocument(Document document){
-        documents.add(document);
-    }
-
-    public Integer numOfDocs(){
-        return documents.size();
     }
 
     public Boolean documentsContain(Document document) {

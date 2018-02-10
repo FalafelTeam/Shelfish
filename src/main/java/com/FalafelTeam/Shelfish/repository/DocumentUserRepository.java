@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
  * interface for the DocumentUserRepository
  */
 @Repository
-public interface DocumentUserRepository extends CrudRepository<DocumentUser, Long> {
+public interface DocumentUserRepository extends CrudRepository<DocumentUser, Integer> {
 
     DocumentUser findByUserAndDocument(User user, Document document);
 }

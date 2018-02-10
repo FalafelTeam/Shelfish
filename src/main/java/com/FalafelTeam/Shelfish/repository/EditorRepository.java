@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
  * interface for the EditorRepository
  */
 @Repository
-public interface EditorRepository extends CrudRepository<Editor, Long> {
+public interface EditorRepository extends CrudRepository<Editor,Integer> {
 }

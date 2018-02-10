@@ -2,7 +2,6 @@ package com.FalafelTeam.Shelfish.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.access.method.P;
 
 import javax.persistence.*;
 import java.text.DateFormat;
@@ -17,10 +16,10 @@ public class DocumentUser {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private Integer id;
-    @OneToOne
+    @Getter private Integer id;
+    @ManyToOne
     @Getter private Document document;
-    @OneToOne
+    @ManyToOne
     @Getter private User user;
     @Getter private Date date;
     @Getter @Setter private Date dueDate;
