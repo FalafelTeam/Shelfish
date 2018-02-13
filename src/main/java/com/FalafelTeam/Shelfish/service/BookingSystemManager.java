@@ -79,6 +79,9 @@ public class BookingSystemManager {
     public void checkOutDocument(Document document, User patron, User librarian) throws Exception {
 
         if (librarian.getType().equals("librarian")) {
+            if (document.availableCopies() == 0) {
+                throw new Exception("There are no copies of the document available");
+            }
             DocumentUser found = documentUserRepository.findByUserAndDocument(patron, document);
             if (found == null) {
                 throw new Exception("The document wasn't checked out by the user");
