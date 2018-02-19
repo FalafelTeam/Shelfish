@@ -23,7 +23,7 @@ public class User {
     @Getter @Setter private String login;
     @Getter private String password;
     @Getter @Setter private String address;
-    @Getter private String phoneNumber;
+    @Getter @Setter private String phoneNumber;
     @ManyToMany
     @Getter private List<DocumentUser> documents;
 
