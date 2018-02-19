@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 @Service
 public class ModelManager {
@@ -102,5 +103,80 @@ public class ModelManager {
     public void editDocumentName(Document document, String newName){
         document.setName(newName);
         documentRepository.save(document);
+    }
+
+    public void editDocumentDescription(Document document, String newDescripton){
+        document.setDescription(newDescripton);
+        documentRepository.save(document);
+    }
+
+    public void editDocumentCopies(Document document, Integer newCopies){
+        document.setCopies(newCopies);
+        documentRepository.save(document);
+    }
+
+    public void editDocumentEdition(Document document, Integer newEdition){
+        document.setEdition(newEdition);
+        documentRepository.save(document);
+    }
+
+    public void editDocumentPublicationDate(Document document, Date newPublicationDate){
+        document.setPublicationDate(newPublicationDate);
+        documentRepository.save(document);
+    }
+
+    public void editDocumentIsBestseller(Document document, Boolean newIsBestseller){
+        document.setIsBestseller(newIsBestseller);
+        documentRepository.save(document);
+    }
+
+    public void editDocumentPublisher(Document document, Publisher newPublisher){
+        document.setPublisher(newPublisher);
+        documentRepository.save(document);
+    }
+
+    public void editDocumentEditor(Document document, Editor newEditor){
+        document.setEditor(newEditor);
+        documentRepository.save(document);
+    }
+
+    public void editDocumentPrice(Document document, Integer newPrice){
+        document.setPrice(newPrice);
+        documentRepository.save(document);
+    }
+
+    public void editDocumentIsReference(Document document, Boolean newIsReference){
+        document.setIsReference(newIsReference);
+        documentRepository.save(document);
+    }
+
+    public void editDocumentType(Document document, String newType){
+        document.setType(newType);
+        documentRepository.save(document);
+    }
+
+    public void editUserName(User user, String newName){
+        user.setName(newName);
+        userRepository.save(user);
+    }
+
+    public void editUserLogin(User user, String newLogin){
+        user.setLogin(newLogin);
+        userRepository.save(user);
+    }
+
+    public void editUserPassword(User user, String newPassword) throws Exception {
+        user.setPassword(newPassword);
+        userRepository.save(user);
+    }
+
+    public void editUserAdress(User user, String newAdress){
+        user.setAddress(newAdress);
+        userRepository.save(user);
+    }
+
+    public void editUserPhoneNumber(User user, String newPhoneNumber){
+        user.setPhoneNumber(newPhoneNumber);
+        userRepository.save(user);
     }
 }
