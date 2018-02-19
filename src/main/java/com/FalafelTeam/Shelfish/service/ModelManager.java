@@ -98,4 +98,9 @@ public class ModelManager {
         document.setCopies(copies);
         documentRepository.save(document);
     }
+
+    public void editDocumentName(Document document, String newName){
+        document.setName(newName);
+        documentRepository.save(document);
+    }
 }
