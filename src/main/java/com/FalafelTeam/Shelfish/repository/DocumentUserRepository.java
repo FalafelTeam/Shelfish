@@ -4,12 +4,12 @@ import com.FalafelTeam.Shelfish.model.Document;
 import com.FalafelTeam.Shelfish.model.DocumentUser;
 import com.FalafelTeam.Shelfish.model.User;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * interface for the DocumentUserRepository
  */
-@Repository
+@Transactional
 public interface DocumentUserRepository extends CrudRepository<DocumentUser, Integer> {
 
     DocumentUser findByUserAndDocument(User user, Document document);

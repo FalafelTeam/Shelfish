@@ -65,10 +65,12 @@ public class ShelfishApplicationTests {
 		}
 
 		// deleting all created files from the database
-        /*publisherRepository.deleteAll();
-		authorRepository.deleteAll();
-		documentRepository.deleteAll();
-		userRepository.deleteAll();*/
+		modelManager.deleteAllDocumentUsers();
+		modelManager.deleteAllDocuments();
+		modelManager.deleteAllUsers();
+		modelManager.deleteAllPublishers();
+		modelManager.deleteAllAuthors();
+
 	}
 
 	@Test
@@ -112,6 +114,13 @@ public class ShelfishApplicationTests {
 				TimeUnit.MILLISECONDS) == 7 * 4) {
 			System.out.println("OK");
 		} else throw new Exception("Wrong due date");
+
+		// deleting all created files from the database
+		modelManager.deleteAllDocumentUsers();
+		modelManager.deleteAllDocuments();
+		modelManager.deleteAllUsers();
+		modelManager.deleteAllPublishers();
+		modelManager.deleteAllAuthors();
 	}
 
 	@Test
@@ -141,11 +150,17 @@ public class ShelfishApplicationTests {
 				TimeUnit.MILLISECONDS) == 7 * 2) {
 			System.out.println("OK");
 		} else throw new Exception("Wrong due date");
+
+		// deleting all created files from the database
+		modelManager.deleteAllDocumentUsers();
+		modelManager.deleteAllDocuments();
+		modelManager.deleteAllUsers();
+		modelManager.deleteAllPublishers();
+		modelManager.deleteAllAuthors();
 	}
 
-	/*@Test
+	@Test
 	public void testCase5() throws Exception {
-
 
 		System.out.print("testCase5: ");
 
@@ -174,5 +189,12 @@ public class ShelfishApplicationTests {
 		} catch (Throwable exception){
 			System.out.println(exception.toString());
 		}
-	}*/
+
+		// deleting all created files from the database
+		modelManager.deleteAllDocumentUsers();
+		modelManager.deleteAllDocuments();
+		modelManager.deleteAllUsers();
+		modelManager.deleteAllPublishers();
+		modelManager.deleteAllAuthors();
+	}
 }

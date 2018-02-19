@@ -18,7 +18,7 @@ public class Author {
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Getter private Integer id;
     @Getter @Setter private String name;
-    @OneToMany
+    @ManyToMany(mappedBy = "authors", cascade = {CascadeType.ALL})
     @Getter private List<Document> documents;
 
     public Author() {

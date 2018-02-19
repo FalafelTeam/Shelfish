@@ -22,12 +22,16 @@ public class Document {
     @Getter @Setter private Date publicationDate;
     @Getter @Setter private Boolean isBestseller;
     @ManyToOne
+    @JoinColumn(name = "publisher_id")
     @Getter @Setter private Publisher publisher;
     @ManyToOne
+    @JoinColumn(name = "editor_id")
     @Getter @Setter private Editor editor;
     @ManyToMany
+    @JoinTable(name = "document_author", joinColumns = @JoinColumn(name = "document_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"))
     @Getter private List<Author> authors;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "document", cascade = {CascadeType.ALL})
     @Getter private List<DocumentUser> users;
     @Getter @Setter private Integer price;
     @Getter @Setter private Boolean isReference;
@@ -169,6 +173,26 @@ public class Document {
 
     public Integer availableCopies() {
         return copies - this.takenBySize();
+    }
+
+    @PreRemove
+    public void preRemove() {
+        this.editor = null;
+        this.publisher = null;
+        this.authors = null;
+        this.users = null;
+    }
+
+    public void removeUser(DocumentUser user) {
+        ListIterator<DocumentUser> iterator = users.listIterator();
+        DocumentUser found;
+        while (iterator.hasNext()) {
+            found = iterator.next();
+            if (found.equals(user)) {
+                this.getUsers().remove(found);
+                break;
+            }
+        }
     }
 }
 

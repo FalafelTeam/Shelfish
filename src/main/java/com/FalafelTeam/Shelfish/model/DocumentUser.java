@@ -18,8 +18,10 @@ public class DocumentUser {
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Getter private Integer id;
     @ManyToOne
+    @JoinColumn(name = "document_id")
     @Getter private Document document;
     @ManyToOne
+    @JoinColumn(name = "user_id")
     @Getter private User user;
     @Getter private Date date;
     @Getter @Setter private Date dueDate;
@@ -48,5 +50,13 @@ public class DocumentUser {
         else{
             throw new Exception("Wrong status");
         }
+    }
+
+    @PreRemove
+    private void preRemove() {
+        this.document.removeUser(this);
+        this.document = null;
+        this.user.getDocuments().remove(this);
+        this.user = null;
     }
 }

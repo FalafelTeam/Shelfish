@@ -2,6 +2,7 @@ package com.FalafelTeam.Shelfish.service;
 
 import com.FalafelTeam.Shelfish.model.*;
 import com.FalafelTeam.Shelfish.repository.*;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,16 +14,22 @@ public class ModelManager {
 
 
     @Autowired
+    @Getter
     private AuthorRepository authorRepository;
     @Autowired
+    @Getter
     private DocumentRepository documentRepository;
     @Autowired
+    @Getter
     private DocumentUserRepository documentUserRepository;
     @Autowired
+    @Getter
     private EditorRepository editorRepository;
     @Autowired
+    @Getter
     private PublisherRepository publisherRepository;
     @Autowired
+    @Getter
     private UserRepository userRepository;
 
     public Author addAuthor(String name) {
@@ -178,5 +185,29 @@ public class ModelManager {
     public void editUserPhoneNumber(User user, String newPhoneNumber){
         user.setPhoneNumber(newPhoneNumber);
         userRepository.save(user);
+    }
+
+    public void deleteAllAuthors() {
+        authorRepository.deleteAll();
+    }
+
+    public void deleteAllDocuments() {
+        documentRepository.deleteAll();
+    }
+
+    public void deleteAllDocumentUsers() {
+        documentUserRepository.deleteAll();
+    }
+
+    public void deleteAllEditors() {
+        editorRepository.deleteAll();
+    }
+
+    public void deleteAllPublishers() {
+        publisherRepository.deleteAll();
+    }
+
+    public void deleteAllUsers() {
+        userRepository.deleteAll();
     }
 }

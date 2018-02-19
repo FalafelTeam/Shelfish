@@ -24,7 +24,7 @@ public class User {
     @Getter private String password;
     @Getter @Setter private String address;
     @Getter @Setter private String phoneNumber;
-    @ManyToMany
+    @ManyToMany(mappedBy = "user", cascade = {CascadeType.ALL})
     @Getter private List<DocumentUser> documents;
 
     public User() {
