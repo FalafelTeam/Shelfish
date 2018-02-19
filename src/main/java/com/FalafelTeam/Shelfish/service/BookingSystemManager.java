@@ -32,19 +32,58 @@ public class BookingSystemManager {
      * @param user user that wants to book the document
      * @param isOutstanding if the request for the document is outstanding
      */
+    public void bookDocument(Document document, User user, int weeks, Boolean isOutstanding) throws Exception {
+
+        DocumentUser documentUser = new DocumentUser(document, user, new Date(), isOutstanding);
+        if (document.getType().equals("book")) {
+            if (document.getIsBestseller()) {
+                if(weeks>2){
+                    throw new Exception("Too many weeks");
+                }
+                else documentUser.setDueDate(addWeeks(documentUser.getDate(), weeks));
+
+            } else if (user.getType().equals("faculty")) {
+                if(weeks>4){
+                    throw new Exception("Too many weeks");
+                }
+                else documentUser.setDueDate(addWeeks(documentUser.getDate(), weeks));
+
+            } else {
+                if(weeks>3){
+                    throw new Exception("Too many weeks"); // UNHANDLED
+                }
+                else documentUser.setDueDate(addWeeks(documentUser.getDate(), weeks));
+            }
+        } else {
+            if(weeks>2){
+                throw new Exception("Too many weeks");
+            }
+            else documentUser.setDueDate(addWeeks(documentUser.getDate(), weeks));
+        }
+        documentUserRepository.save(documentUser);
+
+        document.addToQueue(documentUser);
+        documentRepository.save(document);
+
+        user.getDocuments().add(documentUser);
+        userRepository.save(user);
+    }
+
     public void bookDocument(Document document, User user, Boolean isOutstanding) throws Exception {
 
         DocumentUser documentUser = new DocumentUser(document, user, new Date(), isOutstanding);
         if (document.getType().equals("book")) {
             if (document.getIsBestseller()) {
                 documentUser.setDueDate(addWeeks(documentUser.getDate(), 2));
+
             } else if (user.getType().equals("faculty")) {
                 documentUser.setDueDate(addWeeks(documentUser.getDate(), 4));
+
             } else {
                 documentUser.setDueDate(addWeeks(documentUser.getDate(), 3));
             }
         } else {
-            documentUser.setDueDate(addWeeks(documentUser.getDate(), 2));
+             documentUser.setDueDate(addWeeks(documentUser.getDate(), 2));
         }
         documentUserRepository.save(documentUser);
 
