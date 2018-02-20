@@ -215,4 +215,8 @@ public class ModelManager {
     public void deleteAllUsers() {
         userRepository.deleteAll();
     }
+
+    public void deleteById(int id){
+        userRepository.deleteById(id);
+    }
 }

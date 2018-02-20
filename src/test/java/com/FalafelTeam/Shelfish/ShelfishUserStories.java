@@ -10,8 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.ui.Model;
-import sun.jvm.hotspot.ui.Editor;
 
 import java.util.List;
 
@@ -105,7 +103,7 @@ public class ShelfishUserStories {
     }
     @Test
     public void userStory9() throws Exception {
-        User librarian = modelManager.addUser("lib", "librarian", "345", "345","", "";
+        User librarian = modelManager.addUser("lib", "librarian", "345", "345","", "");
         User user = modelManager.addUser("TestUser1", "faculty", "123", "123", "1", "1");
         Publisher pub = modelManager.addPublisher("publisher");
         Author author = modelManager.addAuthor("author");
@@ -115,5 +113,60 @@ public class ShelfishUserStories {
         List<Document> documents = documentRepository.findAll();
         List<User> users = userRepository.findAll();
         List<DocumentUser> relations = documentUserRepository.findAll();
+    }
+
+    @Test
+    public void userStory10(){
+        User user = modelManager.addUser("shelfish1", "faculty", "123", "123", "1", "1");
+        User user1 = modelManager.addUser("shelfish2", "student", "123", "123", "1", "1");
+        modelManager.deleteById(userRepository.findByName("shelfish1").getId());
+    }
+
+    @Test
+    public void userStory11(){
+        //As a librarian, I would like to modify some information about a
+        //particular user such as a student has been upgraded to faculty
+    }
+
+    @Test
+    public void userStory12() throws Exception {
+        User librarian = modelManager.addUser("lib", "librarian", "345", "345","", "");
+        User user = modelManager.addUser("TestUser1", "faculty", "123", "123", "1", "1");
+        Publisher pub = modelManager.addPublisher("publisher");
+        Author author = modelManager.addAuthor("author");
+        Document b1 = modelManager.addBook("testbook", 2, 0,false, false, 0, pub, author, "");
+        bookingManager.bookDocument(b1, user, 1,false);
+        bookingManager.checkOutDocument(b1, user, librarian);
+
+        documentUserRepository.findByUserAndDocument(user, b1).getDueDate();
+    }
+
+    @Test
+    public void userStory13(){
+        //As a patron, I would like to return a book.
+    }
+
+    @Test
+    public void userStory14(){
+        //As a librarian, I would like to delete a book from the storage
+        //system (e.g. because it has been lost).
+    }
+
+    @Test
+    public void userStory15(){
+        //As a librarian I want to add a new document and specify the
+        //amount of copies of the document
+    }
+
+    @Test
+    public void userStory16(){
+        //As a librarian I want to see the list of checked out documents
+        //(as in US9) and request the return of some specific document.
+    }
+
+    @Test
+    public void userStory17(){
+        //As a librarian I would like to accept the documents returned by
+        //patrons
     }
 }
