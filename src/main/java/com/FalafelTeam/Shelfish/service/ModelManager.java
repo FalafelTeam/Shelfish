@@ -187,6 +187,11 @@ public class ModelManager {
         userRepository.save(user);
     }
 
+    public void addCopiesToDocument(Document document, int plus){
+        document.setCopies(document.getCopies()+plus);
+        documentRepository.save(document);
+    }
+
     public void deleteAllAuthors() {
         authorRepository.deleteAll();
     }

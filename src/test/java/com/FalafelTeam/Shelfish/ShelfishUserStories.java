@@ -1,10 +1,7 @@
 package com.FalafelTeam.Shelfish;
 
 import com.FalafelTeam.Shelfish.controller.BookingController;
-import com.FalafelTeam.Shelfish.model.Author;
-import com.FalafelTeam.Shelfish.model.Document;
-import com.FalafelTeam.Shelfish.model.Publisher;
-import com.FalafelTeam.Shelfish.model.User;
+import com.FalafelTeam.Shelfish.model.*;
 import com.FalafelTeam.Shelfish.repository.*;
 import com.FalafelTeam.Shelfish.service.BookingSystemManager;
 import com.FalafelTeam.Shelfish.service.ModelManager;
@@ -47,11 +44,13 @@ public class ShelfishUserStories {
 
     @Test
     public void userStory2() throws Exception {
+        User librarian = modelManager.addUser("lib", "librarian", "345", "345","", "");
         User user = modelManager.addUser("TestUser1", "faculty", "123", "123", "1", "1");
         Publisher pub = modelManager.addPublisher("publisher");
         Author author = modelManager.addAuthor("author");
         Document b1 = modelManager.addBook("testbook", 2, 0,false, false, 0, pub, author, "");
         bookingManager.bookDocument(b1, user, 1,false);
+        bookingManager.checkOutDocument(b1, user, librarian);
     }
 
     @Test
@@ -82,6 +81,13 @@ public class ShelfishUserStories {
         modelManager.editDocumentPublisher(b1, pub);
 
     }
+    @Test
+    public void userStory6(){
+        Publisher pub = modelManager.addPublisher("publisher");
+        Author author = modelManager.addAuthor("author");
+        Document b1 = modelManager.addBook("testbook", 2, 0,false, false, 0, pub, author, "");
+        modelManager.addCopiesToDocument(b1, 1);
+    }
 
     @Test
     public void userStory7() throws Exception {
@@ -96,5 +102,18 @@ public class ShelfishUserStories {
         User userlibrarian = modelManager.addUser("TestUser2", "librarian", "123", "123", "1", "1");
         User user = modelManager.addUser("TestUser1", "faculty", "123", "123", "1", "1");
         modelManager.editUserPhoneNumber(user, "123123123");
+    }
+    @Test
+    public void userStory9() throws Exception {
+        User librarian = modelManager.addUser("lib", "librarian", "345", "345","", "";
+        User user = modelManager.addUser("TestUser1", "faculty", "123", "123", "1", "1");
+        Publisher pub = modelManager.addPublisher("publisher");
+        Author author = modelManager.addAuthor("author");
+        Document b1 = modelManager.addBook("testbook", 2, 0,false, false, 0, pub, author, "");
+        bookingManager.bookDocument(b1, user, 1,false);
+        bookingManager.checkOutDocument(b1, user, librarian);
+        List<Document> documents = documentRepository.findAll();
+        List<User> users = userRepository.findAll();
+        List<DocumentUser> relations = documentUserRepository.findAll();
     }
 }

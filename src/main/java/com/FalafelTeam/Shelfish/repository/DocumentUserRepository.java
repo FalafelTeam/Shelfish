@@ -6,6 +6,8 @@ import com.FalafelTeam.Shelfish.model.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * interface for the DocumentUserRepository
  */
@@ -13,4 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface DocumentUserRepository extends CrudRepository<DocumentUser, Integer> {
 
     DocumentUser findByUserAndDocument(User user, Document document);
+
+    List<DocumentUser> findAll();
 }
