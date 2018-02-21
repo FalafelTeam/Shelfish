@@ -48,10 +48,12 @@ public class Document {
         this.users = new LinkedList<DocumentUser>();
     }
 
-    public Document(String name, int copies, int price, boolean isReference, boolean isBestseller, int edition, Publisher publisher, ArrayList<Author> authors, String image){
+    public Document(String name, String description, int copies, int price, boolean isReference, boolean isBestseller,
+                    int edition, Date publicationDate, Publisher publisher, List<Author> authors, String image){
         this.authors = new LinkedList<Author>();            // Book (type 0)
         this.users = new LinkedList<DocumentUser>();
         this.name=name;
+        this.description = description;
         this.copies = copies;
         this.price=price;
         this.isReference=isReference;
@@ -61,33 +63,41 @@ public class Document {
             this.addAuthor(authors.get(i));
         }
         this.edition = edition;
+        this.publicationDate = publicationDate;
         this.type = "book";
         this.image = image;
     }
 
-    public Document(String name, int copies, int price, boolean isReference, boolean isBestseller, int edition, Publisher publisher, Author author, String image) {
-        this(name, copies, price, isReference, isBestseller, edition, publisher, new ArrayList<Author>(), image);
+    public Document(String name, String description, int copies, int price, boolean isReference, boolean isBestseller,
+                    int edition, Date publicationDate, Publisher publisher, Author author, String image) {
+        this(name, description, copies, price, isReference, isBestseller, edition, publicationDate, publisher,
+                new ArrayList<Author>(), image);
         this.addAuthor(author);
     }
 
-    public Document(String name, int copies, int price, boolean isReference, boolean isBestseller, Publisher publisher, Editor editor, String image){
+    public Document(String name, String description, int copies, int price, boolean isReference, boolean isBestseller,
+                    Date publicationDate, Publisher publisher, Editor editor, String image){
         this.authors = new LinkedList<Author>();
         this.users = new LinkedList<DocumentUser>();            // Article (Type 1)
         this.name=name;
+        this.description = description;
         this.copies = copies;
         this.price=price;
         this.isReference=isReference;
         this.isBestseller=isBestseller;
         this.publisher = publisher;
         this.editor = editor;
+        this.publicationDate = publicationDate;
         this.type = "article";
         this.image = image;
     }
 
-    public Document(String name, int copies, int price, boolean isReference, boolean isBestseller, ArrayList<Author> authors, String image){
+    public Document(String name, String description, int copies, int price, boolean isReference, boolean isBestseller,
+                    Date publicationDate, List<Author> authors, String image){
         this.authors = new LinkedList<Author>();
         this.users = new LinkedList<DocumentUser>();            // AV Material (type 2)
         this.name=name;
+        this.description = description;
         this.copies = copies;
         this.price=price;
         this.isReference=isReference;
@@ -95,6 +105,7 @@ public class Document {
         for (int i = 0; i < authors.size(); i++) {
             this.addAuthor(authors.get(i));
         }
+        this.publicationDate = publicationDate;
         this.type = "avmaterial";
         this.image = image;
     }
@@ -131,7 +142,7 @@ public class Document {
         this.authors.add(author);
     }
 
-    public Boolean athorsContain(Author author) {
+    public Boolean authorsContain(Author author) {
         ListIterator<Author> iterator = authors.listIterator();
         Author found;
         while (iterator.hasNext()) {

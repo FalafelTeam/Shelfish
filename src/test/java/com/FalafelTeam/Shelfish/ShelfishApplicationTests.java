@@ -31,7 +31,7 @@ public class ShelfishApplicationTests {
 	@Autowired
 	ModelManager modelManager;
 
-	@Test
+	/*@Test
 	public void testCase1() throws Exception {
 
 		// initial state
@@ -71,7 +71,7 @@ public class ShelfishApplicationTests {
 		modelManager.deleteAllPublishers();
 		modelManager.deleteAllAuthors();
 
-	}
+	}*/
 
 	@Test
 	public void testCase2() throws Exception {
@@ -87,7 +87,7 @@ public class ShelfishApplicationTests {
 		} else System.out.println("OK");
 	}
 
-	@Test
+	/*@Test
 	public void testCase3() throws Exception {
 
 		System.out.print("testCase3: ");
@@ -196,5 +196,5 @@ public class ShelfishApplicationTests {
 		modelManager.deleteAllUsers();
 		modelManager.deleteAllPublishers();
 		modelManager.deleteAllAuthors();
-	}
+	}*/
 }

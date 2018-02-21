@@ -38,6 +38,6 @@ nbdist/
 
 *.db
 
-### Spring configuration files ###
+### Local Tests
 
-application.properties
+LocalTests.java

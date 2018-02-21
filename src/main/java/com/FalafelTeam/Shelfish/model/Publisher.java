@@ -17,7 +17,7 @@ public class Publisher {
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Getter private Integer id;
     @Setter @Getter private String name;
-    @OneToMany(mappedBy = "publisher", cascade = {CascadeType.ALL})
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "publisher", cascade = {CascadeType.ALL})
     @Getter private List<Document> documents;
 
     public Publisher() {

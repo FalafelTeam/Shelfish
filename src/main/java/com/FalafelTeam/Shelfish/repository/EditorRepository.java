@@ -9,4 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public interface EditorRepository extends CrudRepository<Editor,Integer> {
+
+    Editor findByName(String name);
 }

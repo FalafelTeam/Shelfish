@@ -15,6 +15,4 @@ import java.util.List;
 public interface DocumentUserRepository extends CrudRepository<DocumentUser, Integer> {
 
     DocumentUser findByUserAndDocument(User user, Document document);
-
-    List<DocumentUser> findAll();
 }

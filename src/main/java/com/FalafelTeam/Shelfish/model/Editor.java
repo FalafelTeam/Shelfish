@@ -17,7 +17,7 @@ public class Editor {
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Getter private Integer id;
     @Getter @Setter private String name;
-    @OneToMany(mappedBy = "editor", cascade = {CascadeType.ALL})
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "editor", cascade = {CascadeType.ALL})
     @Getter private List<Document> documents;
 
     public Editor() {

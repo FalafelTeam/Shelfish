@@ -11,5 +11,6 @@ import java.util.List;
  */
 @Transactional
 public interface DocumentRepository extends CrudRepository<Document, Integer> {
-    List<Document> findAll();
+
+    Document findById(Integer id);
 }
