@@ -305,43 +305,25 @@ public class ModelManager {
         }
     }
 
-    private void setPublisher(Document document, String publisherName) {
-        if (publisherName != null) {
-            Publisher publisher;
-            document.getPublisher().getDocuments().remove(document);
-            if (document.getPublisher().getDocuments().size() == 0) {
-                publisher = document.getPublisher();
-                document.setPublisher(null);
-                documentRepository.save(document);
-                publisherRepository.delete(publisher);
-            } else {
-                publisherRepository.save(document.getPublisher());
-            }
-            publisher = publisherRepository.findByName(publisherName);
-            if (publisher == null) {
-                publisher = addPublisher(publisherName);
-            }
-            document.setPublisher(publisher);
-        }
-    }
-
     private void setEditor(Document document, String editorName) {
         if (editorName != null) {
-            Editor editor;
-            document.getEditor().getDocuments().remove(document);
-            if (document.getEditor().getDocuments().size() == 0) {
-                editor = document.getEditor();
-                document.setEditor(null);
-                documentRepository.save(document);
-                editorRepository.delete(editor);
-            } else {
-                editorRepository.save(document.getEditor());
-            }
-            editor = editorRepository.findByName(editorName);
+            removeAndDeleteEditorIfRedundant(document);
+            Editor editor = editorRepository.findByName(editorName);
             if (editor == null) {
                 editor = addEditor(editorName);
             }
             document.setEditor(editor);
+        }
+    }
+
+    private void setPublisher(Document document, String publisherName) {
+        if (publisherName != null) {
+            removeAndDeletePublisherIfRedundant(document);
+            Publisher publisher = publisherRepository.findByName(publisherName);
+            if (publisher == null) {
+                publisher = addPublisher(publisherName);
+            }
+            document.setPublisher(publisher);
         }
     }
 
@@ -380,11 +362,57 @@ public class ModelManager {
     }
 
     public void deleteDocument(Document document) {
+        removeDocumentAuthors(document);
+        removeAndDeleteEditorIfRedundant(document);
+        removeAndDeletePublisherIfRedundant(document);
         documentRepository.delete(document);
     }
 
     public void deleteDocumentById(Integer id) {
-        documentRepository.delete(id);
+        Document document = documentRepository.findById(id);
+        if (document != null) {
+            deleteDocument(document);
+        }
+    }
+
+    private void removeDocumentAuthors(Document document) {
+        ListIterator<Author> authorsIterator = document.getAuthors().listIterator();
+        Author currA;
+        while (authorsIterator.hasNext()) {
+            currA = authorsIterator.next();
+            currA.getDocuments().remove(document);
+            authorRepository.save(currA);
+        }
+        document.getAuthors().clear();
+        documentRepository.save(document);
+    }
+
+    private void removeAndDeleteEditorIfRedundant(Document document) {
+        Editor editor = document.getEditor();
+        if (editor != null) {
+            editor.getDocuments().remove(document);
+            document.setEditor(null);
+            documentRepository.save(document);
+            if (editor.getDocuments().size() == 0) {
+                editorRepository.delete(editor);
+            } else {
+                editorRepository.save(document.getEditor());
+            }
+        }
+    }
+
+    private void removeAndDeletePublisherIfRedundant(Document document) {
+        Publisher publisher = document.getPublisher();
+        if (publisher != null) {
+            publisher.getDocuments().remove(document);
+            document.setPublisher(null);
+            documentRepository.save(document);
+            if (publisher.getDocuments().size() == 0) {
+                publisherRepository.delete(publisher);
+            } else {
+                publisherRepository.save(document.getPublisher());
+            }
+        }
     }
 
     public void deleteUser(User user) {

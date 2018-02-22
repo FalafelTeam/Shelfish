@@ -186,13 +186,13 @@ public class Document {
         return copies - this.takenBySize();
     }
 
-    @PreRemove
+    /*@PreRemove
     public void preRemove() {
         this.editor = null;
         this.publisher = null;
         this.authors = null;
         this.users = null;
-    }
+    }*/
 
     public void removeUser(DocumentUser user) {
         ListIterator<DocumentUser> iterator = users.listIterator();
