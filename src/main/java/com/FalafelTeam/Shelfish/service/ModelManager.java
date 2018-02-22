@@ -25,9 +25,7 @@ public class ModelManager {
     private UserRepository userRepository;
 
     // Add methods:
-    // need to remove all but addDocument and addUser, all other make private
 
-    // not complete
     public Document addDocument(String name, String type, List<String> authorNames, String publisherName,
                                 String editorName, Integer edition, Date publicationDate, String image,
                                 String description, Boolean isBestseller, Integer price, Integer copies,
@@ -158,8 +156,8 @@ public class ModelManager {
     }
 
     // Modify methods:
+    // modify stated attributes, do not modify attributes associated with null parameters
 
-    // modifyes stated attributes, does not modify attributes associated with null parameters
     public void modifyDocument(Document document, String name, String description, Integer copies, Integer edition,
                                Date publicationDate, Boolean isBestseller, String publisherName, String editorName,
                                List<String> authorNames, Integer price, Boolean isReference, String image) {
@@ -179,7 +177,6 @@ public class ModelManager {
         documentRepository.save(document);
     }
 
-    // needs testing when some authors are removed
     private Document modifyBook(Document document, String name, String description, Integer copies, Integer edition,
                                 Date publicationDate, Boolean isBestseller, String publisherName,
                                 List<String> authorNames, Integer price, Boolean isReference, String image) {
@@ -310,9 +307,17 @@ public class ModelManager {
 
     private void setPublisher(Document document, String publisherName) {
         if (publisherName != null) {
+            Publisher publisher;
             document.getPublisher().getDocuments().remove(document);
-            publisherRepository.save(document.getPublisher());
-            Publisher publisher = publisherRepository.findByName(publisherName);
+            if (document.getPublisher().getDocuments().size() == 0) {
+                publisher = document.getPublisher();
+                document.setPublisher(null);
+                documentRepository.save(document);
+                publisherRepository.delete(publisher);
+            } else {
+                publisherRepository.save(document.getPublisher());
+            }
+            publisher = publisherRepository.findByName(publisherName);
             if (publisher == null) {
                 publisher = addPublisher(publisherName);
             }
@@ -322,9 +327,17 @@ public class ModelManager {
 
     private void setEditor(Document document, String editorName) {
         if (editorName != null) {
+            Editor editor;
             document.getEditor().getDocuments().remove(document);
-            editorRepository.save(document.getEditor());
-            Editor editor = editorRepository.findByName(editorName);
+            if (document.getEditor().getDocuments().size() == 0) {
+                editor = document.getEditor();
+                document.setEditor(null);
+                documentRepository.save(document);
+                editorRepository.delete(editor);
+            } else {
+                editorRepository.save(document.getEditor());
+            }
+            editor = editorRepository.findByName(editorName);
             if (editor == null) {
                 editor = addEditor(editorName);
             }
@@ -332,43 +345,50 @@ public class ModelManager {
         }
     }
 
+    public void modifyUser(User user, String name, String type, String login, String password, String address,
+                           String phoneNumber) throws Exception {
+        if (name != null) {
+            user.setName(name);
+        }
+        if (type != null) {
+            user.setType(type);
+        }
+        if (login != null) {
+            user.setLogin(login);
+        }
+        if (password != null) {
+            user.setPassword(password);
+        }
+        if (address != null) {
+            user.setAddress(address);
+        }
+        if (phoneNumber != null) {
+            user.setPhoneNumber(phoneNumber);
+        }
+        userRepository.save(user);
+    }
+
     // Delete methods:
 
     public void clearDB() {
-        deleteAllDocumentUsers();
-        deleteAllUsers();
-        deleteAllDocuments();
-        deleteAllAuthors();
-        deleteAllEditors();
-        deleteAllPublishers();
-    }
-
-    public void deleteAllAuthors() {
-        authorRepository.deleteAll();
-    }
-
-    public void deleteAllDocuments() {
-        documentRepository.deleteAll();
-    }
-
-    public void deleteAllDocumentUsers() {
         documentUserRepository.deleteAll();
-    }
-
-    public void deleteAllEditors() {
+        userRepository.deleteAll();
+        documentRepository.deleteAll();
+        authorRepository.deleteAll();
         editorRepository.deleteAll();
-    }
-
-    public void deleteAllPublishers() {
         publisherRepository.deleteAll();
     }
 
-    private void deletePublisher(Publisher publisher) {
-        publisherRepository.delete(publisher);
+    public void deleteDocument(Document document) {
+        documentRepository.delete(document);
     }
 
-    public void deleteAllUsers() {
-        userRepository.deleteAll();
+    public void deleteDocumentById(Integer id) {
+        documentRepository.delete(id);
+    }
+
+    public void deleteUser(User user) {
+        userRepository.delete(user);
     }
 
     public void deleteUserById(int id){

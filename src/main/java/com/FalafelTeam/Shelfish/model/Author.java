@@ -2,6 +2,7 @@ package com.FalafelTeam.Shelfish.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
 
 import javax.persistence.*;
 import java.util.ArrayList;
