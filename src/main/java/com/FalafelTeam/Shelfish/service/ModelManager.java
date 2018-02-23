@@ -2,11 +2,13 @@ package com.FalafelTeam.Shelfish.service;
 
 import com.FalafelTeam.Shelfish.model.*;
 import com.FalafelTeam.Shelfish.repository.*;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
@@ -454,5 +456,11 @@ public class ModelManager {
             userRepository.save(currDU.getUser());
             documentUserRepository.delete(currDU);
         }
+    }
+
+    // Find methods:
+
+    public List<User> getAllPatrons() {
+        return userRepository.findAllByTypeOrType("faculty", "student");
     }
 }

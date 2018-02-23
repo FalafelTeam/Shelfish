@@ -3,7 +3,9 @@ package com.FalafelTeam.Shelfish.service;
 import com.FalafelTeam.Shelfish.model.Document;
 import com.FalafelTeam.Shelfish.model.DocumentUser;
 import com.FalafelTeam.Shelfish.model.User;
-import com.FalafelTeam.Shelfish.repository.*;
+import com.FalafelTeam.Shelfish.repository.DocumentRepository;
+import com.FalafelTeam.Shelfish.repository.DocumentUserRepository;
+import com.FalafelTeam.Shelfish.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,51 +16,45 @@ import java.util.Date;
 public class BookingSystemManager {
 
     @Autowired
-    private AuthorRepository authorRepository;
-    @Autowired
     private DocumentRepository documentRepository;
     @Autowired
     private DocumentUserRepository documentUserRepository;
     @Autowired
-    private EditorRepository editorRepository;
-    @Autowired
-    private PublisherRepository publisherRepository;
-    @Autowired
     private UserRepository userRepository;
 
     /**
-     * method for booking documents in the library
+     * method for booking documents in the library when preferred number of booking weeks is stated
      * @param document document that needs to be booked
      * @param user user that wants to book the document
+     * @param weeksNum preferred number of booking weeks
      * @param isOutstanding if the request for the document is outstanding
+     * @throws Exception "The preferred number of booking weeks is too big" when the preferred number of booking weeks
+     *                          is bigger than allowed
+     *                   "The document is a reference material"
      */
-    public void bookDocument(Document document, User user, int weeks, Boolean isOutstanding) throws Exception {
-
+    public void bookDocument(Document document, User user, Integer weeksNum, Boolean isOutstanding) throws Exception {
+        if (document.getIsReference().equals(true)) {
+            throw new Exception("The document is a reference material");
+        }
         DocumentUser documentUser = new DocumentUser(document, user, new Date(), isOutstanding);
+        Integer maxWeeksNum;
         if (document.getType().equals("book")) {
-            if (document.getIsBestseller()) {
-                if(weeks>2){
-                    throw new Exception("Too many weeks");
-                }
-                else documentUser.setDueDate(addWeeks(documentUser.getDate(), weeks));
-
-            } else if (user.getType().equals("faculty")) {
-                if(weeks>4){
-                    throw new Exception("Too many weeks");
-                }
-                else documentUser.setDueDate(addWeeks(documentUser.getDate(), weeks));
-
+            if (user.getType().equals("faculty")) {
+                maxWeeksNum = 4;
+            } else if (document.getIsBestseller()) {
+                maxWeeksNum = 2;
             } else {
-                if(weeks>3){
-                    throw new Exception("Too many weeks"); // UNHANDLED
-                }
-                else documentUser.setDueDate(addWeeks(documentUser.getDate(), weeks));
+                maxWeeksNum = 3;
             }
         } else {
-            if(weeks>2){
-                throw new Exception("Too many weeks");
-            }
-            else documentUser.setDueDate(addWeeks(documentUser.getDate(), weeks));
+            maxWeeksNum = 2;
+        }
+        if (weeksNum == null) {
+            documentUser.setDueDate(addWeeks(documentUser.getDate(), maxWeeksNum));
+        } else if (weeksNum > maxWeeksNum) {
+            throw new Exception("The preferred number of booking weeks is too big");
+        } else {
+            documentUser.setDueDate(addWeeks(documentUser.getDate(), weeksNum));
         }
         documentUserRepository.save(documentUser);
 
@@ -69,29 +65,14 @@ public class BookingSystemManager {
         userRepository.save(user);
     }
 
+    /**
+     * method for booking documents in the library when preferred number of booking weeks is not stated
+     * @param document document that needs to be booked
+     * @param user user that wants to book the document
+     * @param isOutstanding if the request for the document is outstanding
+     */
     public void bookDocument(Document document, User user, Boolean isOutstanding) throws Exception {
-
-        DocumentUser documentUser = new DocumentUser(document, user, new Date(), isOutstanding);
-        if (document.getType().equals("book")) {
-            if (document.getIsBestseller()) {
-                documentUser.setDueDate(addWeeks(documentUser.getDate(), 2));
-
-            } else if (user.getType().equals("faculty")) {
-                documentUser.setDueDate(addWeeks(documentUser.getDate(), 4));
-
-            } else {
-                documentUser.setDueDate(addWeeks(documentUser.getDate(), 3));
-            }
-        } else {
-             documentUser.setDueDate(addWeeks(documentUser.getDate(), 2));
-        }
-        documentUserRepository.save(documentUser);
-
-        document.addToQueue(documentUser);
-        documentRepository.save(document);
-
-        user.getDocuments().add(documentUser);
-        userRepository.save(user);
+        bookDocument(document, user, null, isOutstanding);
     }
 
     /**
@@ -112,23 +93,50 @@ public class BookingSystemManager {
      * @param document document that needs to be checked out
      * @param patron patron that wants to check out the document
      * @param librarian librarian that fulfills the check out requst
-     * @throws Exception "Permission denied" if the user that tries to fulfill the request is not a librarian
+     * @throws Exception "Permission denied" if the user who tries to fulfill the request is not a librarian
      *                   "The user is not in the queue for the book"
+     *                   "The document wasn't booked by the user"
+     *                   "There are no copies of the document available"
+     *                   "The document is a reference material"
      */
     public void checkOutDocument(Document document, User patron, User librarian) throws Exception {
-
+        if (document.getIsReference().equals(true)) {
+            throw new Exception("The document is a reference material");
+        }
         if (librarian.getType().equals("librarian")) {
             if (document.availableCopies() == 0) {
                 throw new Exception("There are no copies of the document available");
             }
             DocumentUser found = documentUserRepository.findByUserAndDocument(patron, document);
             if (found == null) {
-                throw new Exception("The document wasn't checked out by the user");
+                throw new Exception("The document wasn't booked by the user");
             }
             if (document.queueContains(found)) {
                 found.setStatus("taken");
                 documentUserRepository.save(found);
             } else throw new Exception("The user is not in the queue for the book");
         } else throw new Exception("Permission denied");
+    }
+
+    /**
+     * method for returning the document to the library
+     * @param document the document that is being returned
+     * @param user the user that is returning the document
+     * @throws Exception "The document wasn't booked by the user"
+     *                   "The document wasn't checked out by the user"
+     */
+    public void returnDocument(Document document, User user) throws Exception {
+        DocumentUser found = documentUserRepository.findByUserAndDocument(user, document);
+        if (found == null) {
+            throw new Exception("The document wasn't booked by the user");
+        } else if (found.getStatus().equals("new")) {
+            throw new Exception("The document wasn't checked out by the user");
+        } else {
+            document.getUsers().remove(found);
+            documentRepository.save(document);
+            user.getDocuments().remove(found);
+            userRepository.save(user);
+            documentUserRepository.delete(found);
+        }
     }
 }
