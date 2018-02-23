@@ -460,7 +460,23 @@ public class ModelManager {
 
     // Find methods:
 
+    public List<User> getAllUsers() {
+        return (List<User>) userRepository.findAll();
+    }
+
     public List<User> getAllPatrons() {
         return userRepository.findAllByTypeOrType("faculty", "student");
+    }
+
+    public List<User> getAllUsersByType(String type) {
+        return userRepository.findAllByType(type);
+    }
+
+    public List<Document> getAllDocuments() {
+        return (List<Document>) documentRepository.findAll();
+    }
+
+    public List<Document> getAllDocumentsByType(String type) {
+        return documentRepository.findAllByType(type);
     }
 }

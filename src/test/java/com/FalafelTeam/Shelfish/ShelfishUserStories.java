@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,23 +26,28 @@ public class ShelfishUserStories {
     @Test
     public void userStory1() throws Exception {
         modelManager.clearDB();
-        User user = modelManager.addUser("TestUser1", "student", "123", "123", "1", "1");
+        User user = modelManager.addUser("TestUser1", "student", "123", "123",
+                "1", "1");
         List<String> authorNames = new LinkedList<>();
         authorNames.add("author");
         Document b1 = modelManager.addDocument("testbook", "book", authorNames, "publisher",
-                "", 1, null, "", "", false, 0, 2, false);
+                "", 1, null, "", "", false, 0,
+                2, false);
         bookingManager.bookDocument(b1, user, 2,false);
     }
 
     @Test
     public void userStory2() throws Exception {
         modelManager.clearDB();
-        User librarian = modelManager.addUser("lib", "librarian", "345", "345","", "");
-        User user = modelManager.addUser("TestUser1", "faculty", "123", "123", "1", "1");
+        User librarian = modelManager.addUser("lib", "librarian", "345", "345",
+                "", "");
+        User user = modelManager.addUser("TestUser1", "faculty", "123", "123",
+                "1", "1");
         List<String> authorNames = new LinkedList<>();
         authorNames.add("author");
         Document b1 = modelManager.addDocument("testbook", "book", authorNames, "publisher",
-                "", 1, null, "", "", false, 0, 2, false);
+                "", 1, null, "", "", false, 0,
+                2, false);
         bookingManager.bookDocument(b1, user, 1,false);
         bookingManager.checkOutDocument(b1, user, librarian);
     }
@@ -49,71 +55,78 @@ public class ShelfishUserStories {
     @Test
     public void userStory3(){
         modelManager.clearDB();
-        User user1 = modelManager.addUser("TestUser1", "student", "234", "234", "", "");
+        User user1 = modelManager.addUser("TestUser1", "student", "234", "234",
+                "", "");
     }
 
     @Test
     public void userStory4() throws Exception {
         modelManager.clearDB();
-        User user = modelManager.addUser("TestUser1", "faculty", "123", "123", "1", "1");
-        User userlibrarian = modelManager.addUser("TestUser2", "librarian", "123", "123", "1", "1");
+        User user = modelManager.addUser("TestUser1", "faculty", "123", "123",
+                "1", "1");
+        User userlibrarian = modelManager.addUser("TestUser2", "librarian", "123", "123",
+                "1", "1");
         List<User> users = modelManager.getAllPatrons();
+        System.out.print("userStory4: The number of patrons is ");
+        System.out.println(users.size());
     }
 
-    /*@Test
+    @Test
     public void userStory5() throws Exception {
         modelManager.clearDB();
-        User userlibrarian = modelManager.addUser("TestUser2", "librarian", "123", "123", "1", "1");
-        Publisher pub = modelManager.addPublisher("publisher");
-        Author author = modelManager.addAuthor("author");
-        Document b1 = modelManager.addBook("testbook", 2, 0,false, false, 0, pub, author, "");
-        b1.setName("newname");
-        b1.setCopies(10);
-        b1.setDescription("newdescription");
-        b1.setEdition(1);
-        b1.setIsBestseller(true);
-        b1.setIsReference(true);
-        b1.setPrice(123);
-        b1.setPublisher(pub);
-        modelManager.editDocumentName(b1, "newname");
-        modelManager.editDocumentCopies(b1, 10);
-        modelManager.editDocumentDescription(b1, "newdescription");
-        modelManager.editDocumentEdition(b1, 1);
-        modelManager.editDocumentIsBestseller(b1, true);
-        modelManager.editDocumentIsReference(b1, true);
-        modelManager.editDocumentPrice(b1, 123);
-        modelManager.editDocumentPublisher(b1, pub);
-
+        List<String> authorNames = new LinkedList<>();
+        authorNames.add("author");
+        Document b1 = modelManager.addDocument("testbook", "book", authorNames, "publisher",
+                "", 1, null, "", "", false, 0,
+                2, false);
+        modelManager.modifyDocument(b1, "newname", "newdescription", 10, 2, new Date(),
+                true, "newpublisher", null, null, 123,
+                true, "");
     }
+
+    //As a librarian, I would like to add to the system a new copy of a
+    //book that is already in the system (the information data should
+    //be stored).
     @Test
     public void userStory6(){
         modelManager.clearDB();
-        Publisher pub = modelManager.addPublisher("publisher");
+        /*Publisher pub = modelManager.addPublisher("publisher");
         Author author = modelManager.addAuthor("author");
         Document b1 = modelManager.addBook("testbook", 2, 0,false, false, 0, pub, author, "");
-        modelManager.addCopiesToDocument(b1, 1);
+        modelManager.addCopiesToDocument(b1, 1);*/
     }
 
+    //As a librarian, I would like to add a new document (e.g book,
+    //journal), being able to specify the required fields (e.g.  title, au-
+    //thors, etc.).
     @Test
     public void userStory7() throws Exception {
         modelManager.clearDB();
-        User userlibrarian = modelManager.addUser("TestUser2", "librarian", "123", "123", "1", "1");
+        /*User userlibrarian = modelManager.addUser("TestUser2", "librarian", "123", "123", "1", "1");
         Publisher pub = modelManager.addPublisher("publisher");
         Author author = modelManager.addAuthor("author");
-        Document b1 = modelManager.addBook("testbook", 2, 0,false, false, 0, pub, author, "");
+        Document b1 = modelManager.addBook("testbook", 2, 0,false, false, 0, pub, author, "");*/
     }
 
+    //As a librarian, I want to modify a user card, so that I can see the
+    //change after reopening the card.
     @Test
     public void userStory8() throws Exception {
         modelManager.clearDB();
-        User userlibrarian = modelManager.addUser("TestUser2", "librarian", "123", "123", "1", "1");
+        /*User userlibrarian = modelManager.addUser("TestUser2", "librarian", "123", "123", "1", "1");
         User user = modelManager.addUser("TestUser1", "faculty", "123", "123", "1", "1");
-        modelManager.editUserPhoneNumber(user, "123123123");
+        modelManager.editUserPhoneNumber(user, "123123123");*/
     }
+
+    //As a librarian, I would like to have the information of all docu-
+    //ments, users and their relation (who has booked what) even if
+    //the system is restarted.
+    //
+    //Comment: relations can be found through either document or user
     @Test
     public void userStory9() throws Exception {
         modelManager.clearDB();
-        User librarian = modelManager.addUser("lib", "librarian", "345", "345","", "");
+        /*User librarian = modelManager.addUser("lib", "librarian", "345", "345","", "");
         User user = modelManager.addUser("TestUser1", "faculty", "123", "123", "1", "1");
         Publisher pub = modelManager.addPublisher("publisher");
         Author author = modelManager.addAuthor("author");
@@ -122,15 +135,18 @@ public class ShelfishUserStories {
         bookingManager.checkOutDocument(b1, user, librarian);
         List<Document> documents = (List<Document>) documentRepository.findAll();
         List<User> users = (List<User>) userRepository.findAll();
-        List<DocumentUser> relations = (List<DocumentUser>) documentUserRepository.findAll();
+        List<DocumentUser> relations = (List<DocumentUser>) documentUserRepository.findAll();*/
     }
 
+    //As a librarian, I want to add any number of user cards, so that
+    //later I can delete them in any order.
     @Test
     public void userStory10(){
-        User user = modelManager.addUser("shelfish1", "faculty", "123", "123", "1", "1");
+        modelManager.clearDB();
+        /*User user = modelManager.addUser("shelfish1", "faculty", "123", "123", "1", "1");
         User user1 = modelManager.addUser("shelfish2", "student", "123", "123", "1", "1");
-        modelManager.deleteUserById(userRepository.findByName("shelfish1").getId());
-    }*/
+        modelManager.deleteUserById(userRepository.findByName("shelfish1").getId());*/
+    }
 
     @Test
     public void userStory11(){
@@ -138,19 +154,19 @@ public class ShelfishUserStories {
         //particular user such as a student has been upgraded to faculty
     }
 
-    /*@Test
+    //As a student, I will checkout a book and I would like to see the
+    //return date for the book calculated by the system.
+    @Test
     public void userStory12() throws Exception {
         modelManager.clearDB();
-        User librarian = modelManager.addUser("lib", "librarian", "345", "345","", "");
+        /*User librarian = modelManager.addUser("lib", "librarian", "345", "345","", "");
         User user = modelManager.addUser("TestUser1", "faculty", "123", "123", "1", "1");
         Publisher pub = modelManager.addPublisher("publisher");
         Author author = modelManager.addAuthor("author");
         Document b1 = modelManager.addBook("testbook", 2, 0,false, false, 0, pub, author, "");
         bookingManager.bookDocument(b1, user, 1,false);
-        bookingManager.checkOutDocument(b1, user, librarian);
-
-        documentUserRepository.findByUserAndDocument(user, b1).getDueDate();
-    }*/
+        bookingManager.checkOutDocument(b1, user, librarian);*/
+    }
 
     @Test
     public void userStory13(){

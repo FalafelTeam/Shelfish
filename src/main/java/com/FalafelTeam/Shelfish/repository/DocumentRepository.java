@@ -13,4 +13,6 @@ import java.util.List;
 public interface DocumentRepository extends CrudRepository<Document, Integer> {
 
     Document findById(Integer id);
+
+    List<Document> findAllByType(String type);
 }
