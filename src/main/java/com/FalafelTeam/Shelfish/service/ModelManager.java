@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
 public class ModelManager {
@@ -365,6 +366,7 @@ public class ModelManager {
         removeDocumentAuthors(document);
         removeAndDeleteEditorIfRedundant(document);
         removeAndDeletePublisherIfRedundant(document);
+        removeAndDeleteDocumentUsersByDocument(document);
         documentRepository.delete(document);
     }
 
@@ -416,10 +418,41 @@ public class ModelManager {
     }
 
     public void deleteUser(User user) {
+        removeAndDeleteDocumentUsersByUser(user);
         userRepository.delete(user);
     }
 
     public void deleteUserById(int id){
-        userRepository.deleteById(id);
+        User user = userRepository.findById(id);
+        if (user != null) {
+            deleteUser(user);
+        }
+    }
+
+    private void removeAndDeleteDocumentUsersByDocument(Document document) {
+        ListIterator<DocumentUser> iterator = document.getUsers().listIterator();
+        DocumentUser currDU;
+        while (iterator.hasNext()) {
+            currDU = iterator.next();
+            currDU.getUser().getDocuments().remove(currDU);
+            document.getUsers().remove(currDU);
+            userRepository.save(currDU.getUser());
+            documentRepository.save(currDU.getDocument());
+            documentUserRepository.delete(currDU);
+        }
+    }
+
+    private void removeAndDeleteDocumentUsersByUser(User user) {
+        CopyOnWriteArrayList<DocumentUser> list = new CopyOnWriteArrayList<>(user.getDocuments());
+        ListIterator<DocumentUser> iterator = list.listIterator();
+        DocumentUser currDU;
+        while (iterator.hasNext()) {
+            currDU = iterator.next();
+            currDU.getDocument().getUsers().remove(currDU);
+            user.getDocuments().remove(currDU);
+            documentRepository.save(currDU.getDocument());
+            userRepository.save(currDU.getUser());
+            documentUserRepository.delete(currDU);
+        }
     }
 }

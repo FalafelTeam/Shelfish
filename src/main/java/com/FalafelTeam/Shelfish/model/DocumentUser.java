@@ -54,7 +54,7 @@ public class DocumentUser {
 
     @PreRemove
     private void preRemove() {
-        this.document.removeUser(this);
+        this.document.getUsers().remove(this);
         this.document = null;
         this.user.getDocuments().remove(this);
         this.user = null;

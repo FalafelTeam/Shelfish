@@ -185,25 +185,5 @@ public class Document {
     public Integer availableCopies() {
         return copies - this.takenBySize();
     }
-
-    /*@PreRemove
-    public void preRemove() {
-        this.editor = null;
-        this.publisher = null;
-        this.authors = null;
-        this.users = null;
-    }*/
-
-    public void removeUser(DocumentUser user) {
-        ListIterator<DocumentUser> iterator = users.listIterator();
-        DocumentUser found;
-        while (iterator.hasNext()) {
-            found = iterator.next();
-            if (found.equals(user)) {
-                this.getUsers().remove(found);
-                break;
-            }
-        }
-    }
 }
 
