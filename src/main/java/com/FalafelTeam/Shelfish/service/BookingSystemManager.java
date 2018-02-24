@@ -103,19 +103,19 @@ public class BookingSystemManager {
         if (document.getIsReference().equals(true)) {
             throw new Exception("The document is a reference material");
         }
-        if (librarian.getType().equals("librarian")) {
-            if (document.availableCopies() == 0) {
-                throw new Exception("There are no copies of the document available");
-            }
-            DocumentUser found = documentUserRepository.findByUserAndDocument(patron, document);
-            if (found == null) {
-                throw new Exception("The document wasn't booked by the user");
-            }
-            if (document.queueContains(found)) {
-                found.setStatus("taken");
-                documentUserRepository.save(found);
-            } else throw new Exception("The user is not in the queue for the book");
-        } else throw new Exception("Permission denied");
+        checkIfIsLibararian(librarian);
+        if (document.availableCopies() == 0) {
+            throw new Exception("There are no copies of the document available");
+        }
+        DocumentUser found = documentUserRepository.findByUserAndDocument(patron, document);
+        if (found == null) {
+            throw new Exception("The document wasn't booked by the user");
+        }
+        if (document.queueContains(found)) {
+            found.setStatus("taken");
+            documentUserRepository.save(found);
+        } else throw new Exception("The user is not in the queue for the book");
+
     }
 
     /**
@@ -125,7 +125,8 @@ public class BookingSystemManager {
      * @throws Exception "The document wasn't booked by the user"
      *                   "The document wasn't checked out by the user"
      */
-    public void returnDocument(Document document, User user) throws Exception {
+    public void returnDocument(Document document, User user, User librarian) throws Exception {
+        checkIfIsLibararian(librarian);
         DocumentUser found = documentUserRepository.findByUserAndDocument(user, document);
         if (found == null) {
             throw new Exception("The document wasn't booked by the user");
@@ -137,6 +138,24 @@ public class BookingSystemManager {
             user.getDocuments().remove(found);
             userRepository.save(user);
             documentUserRepository.delete(found);
+        }
+    }
+
+    /**
+     * method that sends the return request for the document to the user
+     * @param document the document that has to be returned
+     * @param user the user who has to return the document
+     * @param librarian the user who sends the return request
+     * @throws Exception "Permission denied" if the user who tries to send the return request is not a librarian
+     */
+    public void requestReturn(Document document, User user, User librarian) throws Exception {
+        checkIfIsLibararian(librarian);
+        // the request sending
+    }
+
+    private void checkIfIsLibararian(User user) throws Exception {
+        if (user.getType().equals("librarian")) {
+            throw new Exception("Permission denied");
         }
     }
 }

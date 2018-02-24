@@ -479,4 +479,13 @@ public class ModelManager {
     public List<Document> getAllDocumentsByType(String type) {
         return documentRepository.findAllByType(type);
     }
+
+    public DocumentUser getDocumentUserByDocumentAndUser(Document document, User user, User currentUser) throws Exception {
+        if (!currentUser.getType().equals("librarian")) {
+            if (!currentUser.equals(user)) {
+                throw new Exception("Permission denied");
+            }
+        }
+        return documentUserRepository.findByUserAndDocument(user, document);
+    }
 }
