@@ -359,7 +359,7 @@ public class ModelManager {
         documentUserRepository.deleteAll();
         userRepository.deleteAll();
         documentRepository.deleteAll();
-        authorRepository.deleteAll();
+        //authorRepository.deleteAll();
         editorRepository.deleteAll();
         publisherRepository.deleteAll();
     }

@@ -19,7 +19,7 @@ public class Author {
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Getter private Integer id;
     @Getter @Setter private String name;
-    @ManyToMany(mappedBy = "authors", cascade = {CascadeType.ALL})
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "authors", cascade = {CascadeType.ALL})
     @Getter private List<Document> documents;
 
     public Author() {

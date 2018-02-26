@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(SpringRunner.class)
@@ -17,28 +20,19 @@ import java.util.concurrent.TimeUnit;
 public class ShelfishApplicationTests {
 
 	@Autowired
-	AuthorRepository authorRepository;
-	@Autowired
-	DocumentRepository documentRepository;
-	@Autowired
-	DocumentUserRepository documentUserRepository;
-	@Autowired
-	PublisherRepository publisherRepository;
-	@Autowired
-	UserRepository userRepository;
-	@Autowired
 	BookingSystemManager manager;
 	@Autowired
 	ModelManager modelManager;
 
-	/*@Test
+	@Test
 	public void testCase1() throws Exception {
 
 		// initial state
-		Publisher publisher = modelManager.addPublisher("testpublisher");
-		Author author = modelManager.addAuthor("testauthor");
-		Document book = modelManager.addBook("testbook", 2, 0,false, false,
-				0, publisher, author, "");
+		List<String> authorNames = new LinkedList<>();
+		authorNames.add("author");
+		Document book = modelManager.addDocument("testbook", "book", authorNames, "publisher",
+				"editor", 1, new Date(), "", "", false, 0, 2,
+				false);
 		User patron = modelManager.addUser("testpatron", "student", "testpatron", "test",
 				"", "");
 		User librarian = modelManager.addUser("testlibrarian", "librarian", "testlibrarian",
@@ -47,44 +41,46 @@ public class ShelfishApplicationTests {
 		// test case itself
 		manager.bookDocument(book, patron, false);
 		manager.checkOutDocument(book, patron, librarian);
-		book = documentRepository.findOne(book.getId());
+		DocumentUser relation = modelManager.getDocumentUserByDocumentAndUser(book, patron, librarian);
 
 		// checking conditions
 		System.out.print("testCase1: ");
-		if (documentUserRepository.findByUserAndDocument(patron, book) == null) {
-		    throw new Exception("DocumentUser relation not found");
-        }
-		if (patron.documentsContain(documentUserRepository.findByUserAndDocument(patron, book))) {
-			if (book.availableCopies() == 1) {
-				System.out.println("OK");
-			} else {
-				throw new Exception("Wrong number of copies in the library");
-			}
+		if (relation == null) {
+			throw new Exception("Document-user relation not found");
+		}
+		if (relation.getUser().equals(patron) && relation.getDocument().equals(book)) {
+			System.out.println("OK");
 		} else {
-			throw new Exception("The book isn't in the list of the patron's documents");
+			throw new Exception("Error");
 		}
 
 		// deleting all created files from the database
-		modelManager.deleteAllDocumentUsers();
-		modelManager.deleteAllDocuments();
-		modelManager.deleteAllUsers();
-		modelManager.deleteAllPublishers();
-		modelManager.deleteAllAuthors();
-
-	}*/
+		modelManager.clearDB();
+	}
 
 	@Test
 	public void testCase2() throws Exception {
 
-		System.out.print("testCase2: ");
-
-		// initial state is the same as at the end of testCase1
+	    // initial state
+        List<String> authorNames = new LinkedList<>();
+        authorNames.add("author");
+        Document book = modelManager.addDocument("testbook", "book", authorNames, "publisher",
+                "editor", 1, new Date(), "", "", false, 0, 2,
+                false);
+        User patron = modelManager.addUser("testpatron", "student", "testpatron", "test",
+                "", "");
 
 		// test case
-		Author found = authorRepository.findByName("author");
-		if (found == null) {
-			System.out.println("No such author found");
-		} else System.out.println("OK");
+        System.out.print("testCase2: ");
+        try {
+            manager.bookDocument(book, patron, false);
+            System.out.println("OK");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+		// deleting all created files
+        modelManager.clearDB();
 	}
 
 	/*@Test

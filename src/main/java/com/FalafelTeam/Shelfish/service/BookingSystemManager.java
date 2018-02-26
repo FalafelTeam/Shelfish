@@ -103,7 +103,7 @@ public class BookingSystemManager {
         if (document.getIsReference().equals(true)) {
             throw new Exception("The document is a reference material");
         }
-        checkIfIsLibararian(librarian);
+        checkIfIsLibrarian(librarian);
         if (document.availableCopies() == 0) {
             throw new Exception("There are no copies of the document available");
         }
@@ -126,7 +126,7 @@ public class BookingSystemManager {
      *                   "The document wasn't checked out by the user"
      */
     public void returnDocument(Document document, User user, User librarian) throws Exception {
-        checkIfIsLibararian(librarian);
+        checkIfIsLibrarian(librarian);
         DocumentUser found = documentUserRepository.findByUserAndDocument(user, document);
         if (found == null) {
             throw new Exception("The document wasn't booked by the user");
@@ -149,12 +149,12 @@ public class BookingSystemManager {
      * @throws Exception "Permission denied" if the user who tries to send the return request is not a librarian
      */
     public void requestReturn(Document document, User user, User librarian) throws Exception {
-        checkIfIsLibararian(librarian);
+        checkIfIsLibrarian(librarian);
         // the request sending
     }
 
-    private void checkIfIsLibararian(User user) throws Exception {
-        if (user.getType().equals("librarian")) {
+    private void checkIfIsLibrarian(User user) throws Exception {
+        if (!user.getType().equals("librarian")) {
             throw new Exception("Permission denied");
         }
     }

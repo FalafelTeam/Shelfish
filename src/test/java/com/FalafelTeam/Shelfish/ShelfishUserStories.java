@@ -111,7 +111,7 @@ public class ShelfishUserStories {
         Document b1 = modelManager.addDocument("testbook", "book", authorNames, "publisher",
                 "", 1, null, "", "", false, 0,
                 2, false);
-        modelManager.modifyDocument(null, null, null, 3, null,
+        modelManager.modifyDocument(b1, null, null, 3, null,
                 null, null, null, null, null, null,
                 null, null);
     }
@@ -182,7 +182,7 @@ public class ShelfishUserStories {
         modelManager.clearDB();
         User user = modelManager.addUser("TestUser1", "faculty", "123", "123",
                 "1", "1");
-        modelManager.modifyUser(null, null, "faculty", null, null, null,
+        modelManager.modifyUser(user, null, "faculty", null, null, null,
                 null);
     }
 
