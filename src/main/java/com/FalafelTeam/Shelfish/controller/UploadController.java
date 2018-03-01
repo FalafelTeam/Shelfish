@@ -1,3 +1,6 @@
+package com.FalafelTeam.Shelfish.controller;
+
+import com.FalafelTeam.Shelfish.model.UploadResult;
 import com.FalafelTeam.Shelfish.service.LocalStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,11 +33,6 @@ public class UploadController {
 
     @PostMapping("/upload")
     public UploadResult uploadFile(@RequestParam("token") String token, @RequestParam MultipartFile file) {
-
-        Long applicationid = jwtService.parseToken(token);
-
-        if (applicationid == null)
-            return new UploadResult(false);
 
         try {
             storage.upload(file);
