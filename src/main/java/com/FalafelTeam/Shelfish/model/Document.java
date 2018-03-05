@@ -19,7 +19,7 @@ public class Document {
     @Getter @Setter private String description;
     @Getter @Setter private Integer copies;
     @Getter @Setter private Integer edition;
-    @Getter @Setter private Calendar publicationDate;
+    @Getter @Setter private Date publicationDate;
     @Getter @Setter private Boolean isBestseller;
     @ManyToOne
     @JoinColumn(name = "publisher_id")
@@ -49,7 +49,7 @@ public class Document {
     }
 
     public Document(String name, String description, int copies, int price, boolean isReference, boolean isBestseller,
-                    int edition, Calendar publicationDate, Publisher publisher, List<Author> authors, String image){
+                    int edition, Date publicationDate, Publisher publisher, List<Author> authors, String image){
         this.authors = new LinkedList<Author>();            // Book (type 0)
         this.users = new LinkedList<DocumentUser>();
         this.name=name;
@@ -69,14 +69,14 @@ public class Document {
     }
 
     public Document(String name, String description, int copies, int price, boolean isReference, boolean isBestseller,
-                    int edition, Calendar publicationDate, Publisher publisher, Author author, String image) {
+                    int edition, Date publicationDate, Publisher publisher, Author author, String image) {
         this(name, description, copies, price, isReference, isBestseller, edition, publicationDate, publisher,
                 new ArrayList<Author>(), image);
         this.addAuthor(author);
     }
 
     public Document(String name, String description, int copies, int price, boolean isReference, boolean isBestseller,
-                    Calendar publicationDate, Publisher publisher, Editor editor, String image){
+                    Date publicationDate, Publisher publisher, Editor editor, String image){
         this.authors = new LinkedList<Author>();
         this.users = new LinkedList<DocumentUser>();            // Article (Type 1)
         this.name=name;
@@ -93,7 +93,7 @@ public class Document {
     }
 
     public Document(String name, String description, int copies, int price, boolean isReference, boolean isBestseller,
-                    Calendar publicationDate, List<Author> authors, String image){
+                    Date publicationDate, List<Author> authors, String image){
         this.authors = new LinkedList<Author>();
         this.users = new LinkedList<DocumentUser>();            // AV Material (type 2)
         this.name=name;
