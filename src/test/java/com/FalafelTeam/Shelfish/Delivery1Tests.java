@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ShelfishApplicationTests {
+public class Delivery1Tests {
 
 	@Autowired
 	BookingSystemManager manager;
