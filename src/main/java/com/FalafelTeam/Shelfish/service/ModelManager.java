@@ -5,10 +5,7 @@ import com.FalafelTeam.Shelfish.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Service
@@ -65,13 +62,7 @@ public class ModelManager {
         return author;
     }
 
-    private Document addBook(String name, List<String> authorNames, String publisherName, Integer edition, Date publicationDate,
-                             String image, String description, Boolean isBestseller, Integer price, Integer copies,
-                             Boolean isReference) {
-        Publisher publisher = publisherRepository.findByName(publisherName);
-        if (publisher == null) {
-            publisher = addPublisher(publisherName);
-        }
+    private List<Author> addAuthors(List<String> authorNames) {
         List<Author> authors = new LinkedList<>();
         ListIterator<String> authorNamesIterator = authorNames.listIterator();
         String currA;
@@ -84,6 +75,18 @@ public class ModelManager {
             }
             authors.add(author);
         }
+        return authors;
+    }
+
+    private Document addBook(String name, List<String> authorNames, String publisherName, Integer edition, Date publicationDate,
+                             String image, String description, Boolean isBestseller, Integer price, Integer copies,
+                             Boolean isReference) {
+        Publisher publisher = publisherRepository.findByName(publisherName);
+        if (publisher == null) {
+            publisher = addPublisher(publisherName);
+        }
+        List<Author> authors = addAuthors(authorNames);
+        Author author;
         Document document = new Document(name, description, copies, price, isReference, isBestseller, edition,
                 publicationDate, publisher, authors, image);
         documentRepository.save(document);
@@ -122,18 +125,8 @@ public class ModelManager {
     private Document addAVMaterial(String name, List<String> authorNames, Date publicationDate, String image,
                                    String description, Boolean isBestseller, Integer price, Integer copies,
                                    Boolean isReference) {
-        List<Author> authors = new LinkedList<>();
-        ListIterator<String> authorNamesIterator = authorNames.listIterator();
-        String currA;
+        List<Author> authors = addAuthors(authorNames);
         Author author;
-        while (authorNamesIterator.hasNext()) {
-            currA = authorNamesIterator.next();
-            author = authorRepository.findByName(currA);
-            if (author == null) {
-                author = addAuthor(currA);
-            }
-            authors.add(author);
-        }
         Document document = new Document(name, description, copies, price, isReference, isBestseller, publicationDate,
                 authors, image);
         documentRepository.save(document);
@@ -364,6 +357,26 @@ public class ModelManager {
         publisherRepository.deleteAll();
     }
 
+    /*public void clearDB() {
+        if (userRepository.findAll() != null) {
+            Iterator<User> userIterator = userRepository.findAll().iterator();
+            User user;
+            while (userIterator.hasNext()) {
+                user = userIterator.next();
+                deleteUser(user);
+            }
+        }
+        if (documentRepository.findAll() != null) {
+            Iterator<Document> documentIterator = documentRepository.findAll().iterator();
+            Document document;
+            while (documentIterator.hasNext()) {
+                document = documentIterator.next();
+                deleteDocument(document);
+            }
+        }
+        //authorRepository.deleteAll();
+    }*/
+
     public void deleteDocument(Document document) {
         removeDocumentAuthors(document);
         removeAndDeleteEditorIfRedundant(document);
@@ -438,9 +451,9 @@ public class ModelManager {
             currDU = iterator.next();
             currDU.getUser().getDocuments().remove(currDU);
             document.getUsers().remove(currDU);
+            documentUserRepository.delete(currDU);
             userRepository.save(currDU.getUser());
             documentRepository.save(currDU.getDocument());
-            documentUserRepository.delete(currDU);
         }
     }
 
@@ -452,9 +465,9 @@ public class ModelManager {
             currDU = iterator.next();
             currDU.getDocument().getUsers().remove(currDU);
             user.getDocuments().remove(currDU);
+            documentUserRepository.delete(currDU);
             documentRepository.save(currDU.getDocument());
             userRepository.save(currDU.getUser());
-            documentUserRepository.delete(currDU);
         }
     }
 
@@ -472,12 +485,20 @@ public class ModelManager {
         return userRepository.findAllByType(type);
     }
 
+    public User getUserById(Integer id) {
+        return userRepository.findById(id);
+    }
+
     public List<Document> getAllDocuments() {
         return (List<Document>) documentRepository.findAll();
     }
 
     public List<Document> getAllDocumentsByType(String type) {
         return documentRepository.findAllByType(type);
+    }
+
+    public Document getDocumentById(Integer id) {
+        return documentRepository.findById(id);
     }
 
     public DocumentUser getDocumentUserByDocumentAndUser(Document document, User user, User currentUser) throws Exception {

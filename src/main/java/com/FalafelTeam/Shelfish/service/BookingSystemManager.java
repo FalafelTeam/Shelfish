@@ -70,8 +70,12 @@ public class BookingSystemManager {
      * @param document document that needs to be booked
      * @param user user that wants to book the document
      * @param isOutstanding if the request for the document is outstanding
+     * @throws Exception "The document is reference material"
      */
     public void bookDocument(Document document, User user, Boolean isOutstanding) throws Exception {
+        if (document.getIsReference()) {
+            throw new Exception("The document is reference material");
+        }
         bookDocument(document, user, null, isOutstanding);
     }
 

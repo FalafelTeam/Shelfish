@@ -48,7 +48,8 @@ public class Delivery1Tests {
 		if (relation == null) {
 			throw new Exception("Document-user relation not found");
 		}
-		if (relation.getUser().equals(patron) && relation.getDocument().equals(book)) {
+		if (relation.getUser().getId().equals(patron.getId()) &&
+				relation.getDocument().getId().equals(book.getId())) {
 			System.out.println("OK");
 		} else {
 			throw new Exception("Error");

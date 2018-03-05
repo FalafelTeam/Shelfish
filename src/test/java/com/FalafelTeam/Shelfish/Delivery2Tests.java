@@ -1,6 +1,5 @@
 package com.FalafelTeam.Shelfish;
 
-import com.FalafelTeam.Shelfish.model.Author;
 import com.FalafelTeam.Shelfish.model.Document;
 import com.FalafelTeam.Shelfish.model.User;
 import com.FalafelTeam.Shelfish.service.BookingSystemManager;
@@ -8,10 +7,10 @@ import com.FalafelTeam.Shelfish.service.ModelManager;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class Delivery2Tests {
 
@@ -22,7 +21,8 @@ public class Delivery2Tests {
     private User librarian;
 
     public void initialState() {
-        librarian = modelManager.addUser("User", "librarian", "123", "123", "123", "123");
+        librarian = modelManager.addUser("User", "librarian", "123", "123",
+                "123", "123");
     }
 
     @Test
@@ -50,16 +50,55 @@ public class Delivery2Tests {
         List<String> avAuthor = new LinkedList<>();
         avAuthor.add("Tony Hoare");
         Document av1 = modelManager.addDocument("Null References: The Billion Dollar Mistake", "avmaterial", avAuthor, null,
-                null, null, null, "", "",false, 0, 1, false);
+                null, null, null, "", "", false, 0, 1, false);
         List<String> avAuthor1 = new LinkedList<>();
         avAuthor1.add("Claude Shannon");
         Document av2 = modelManager.addDocument("Information Entropy", "avmaterial", avAuthor1, null,
-                null, null, null, null, "",false, 0, 1, false);
+                null, null, null, null, "", false, 0, 1, false);
         User p1 = modelManager.addUser("Sergey Afonso", "faculty", "123", "123", "30001", "Via Margutta, 3");
         User p2 = modelManager.addUser("Nadia Teixeira", "student", "234", "123", " 30002", "Via Sacra, 13");
         User p3 = modelManager.addUser("Elvira Espindola", "student", "345", "123", ": 30003", ": Via del Corso, 22");
-        modelManager.findUserById(1).setId(1010);
-        modelManager.findUserById(2).setId(1011);
-        modelManager.findUserById(3).setId(1100);
+        modelManager.getUserById(1).setId(1010);
+        modelManager.getUserById(2).setId(1011);
+        modelManager.getUserById(3).setId(1100);
+    }
+
+    @Test
+    public void testCase2() throws Exception {
+        // initial state
+        Document b1 = modelManager.getDocumentById(1);
+        Document b3 = modelManager.getDocumentById(3);
+        User p2 = modelManager.getUserById(1011);
+
+        modelManager.modifyDocument(b1, null, null, b1.getCopies() - 2, null,
+                null, null, null, null, null, null,
+                null, null);
+        modelManager.modifyDocument(b3, null, null, b3.getCopies() - 1, null,
+                null, null, null, null, null, null,
+                null, null);
+        modelManager.deleteUser(p2);
+
+        // checking conditions
+        if (getDocumentsNumber() == 5) {
+            if (modelManager.getAllUsers().size() == 3) {
+                System.out.println("OK");
+            } else throw new Exception("Wrong number of users in the database");
+        } else throw new Exception("Wrong number of documents in the database");
+    }
+
+    @Test
+    public void testCase3() {
+
+    }
+
+    private int getDocumentsNumber() {
+        int copies = 0;
+        Document document;
+        ListIterator<Document> iterator = modelManager.getAllDocuments().listIterator();
+        while (iterator.hasNext()) {
+            document = iterator.next();
+            copies = copies + document.getCopies();
+        }
+        return copies;
     }
 }
