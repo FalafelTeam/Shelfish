@@ -485,11 +485,17 @@ public class ModelManager {
         return userRepository.findAllByType(type);
     }
 
-    public User getUserById(Integer id) {
+    public User getUserById(Integer id) throws Exception {
+        if (userRepository.findById(id) == null) {
+            throw new Exception("The user does not exist");
+        }
         return userRepository.findById(id);
     }
 
-    public User getUserByName(String name){
+    public User getUserByName(String name) throws Exception {
+        if (userRepository.findByName(name) == null) {
+            throw new Exception("The user does not exist");
+        }
         return userRepository.findByName(name);
     }
 
@@ -501,11 +507,17 @@ public class ModelManager {
         return documentRepository.findAllByType(type);
     }
 
-    public Document getDocumentById(Integer id) {
+    public Document getDocumentById(Integer id) throws Exception {
+        if (userRepository.findById(id) == null) {
+            throw new Exception("The document does not exist");
+        }
         return documentRepository.findById(id);
     }
 
-    public Document getDocumentByName(String name){
+    public Document getDocumentByName(String name) throws Exception {
+        if (userRepository.findByName(name) == null) {
+            throw new Exception("The document does not exist");
+        }
         return documentRepository.findByName(name);
     }
 

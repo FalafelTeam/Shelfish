@@ -2,7 +2,6 @@ package com.FalafelTeam.Shelfish;
 
 import com.FalafelTeam.Shelfish.model.Document;
 import com.FalafelTeam.Shelfish.model.User;
-import com.FalafelTeam.Shelfish.repository.UserRepository;
 import com.FalafelTeam.Shelfish.service.BookingSystemManager;
 import com.FalafelTeam.Shelfish.service.ModelManager;
 import org.junit.Test;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.print.Doc;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,9 +58,6 @@ public class Delivery2Tests {
         User p1 = modelManager.addUser("Sergey Afonso", "faculty", "123", "123", "30001", "Via Margutta, 3");
         User p2 = modelManager.addUser("Nadia Teixeira", "student", "234", "123", "30002", "Via Sacra, 13");
         User p3 = modelManager.addUser("Elvira Espindola", "student", "345", "123", "30003", "Via del Corso, 22");
-        /*modelManager.getUserById(1).setId(1010);
-        modelManager.getUserById(2).setId(1011);
-        modelManager.getUserById(3).setId(1100);*/
     }
 
     @Test
@@ -98,60 +93,55 @@ public class Delivery2Tests {
         User p1 = modelManager.getUserById(2);
         User p3 = modelManager.getUserById(4);
 
-        if(!p1.getName().equals("Sergey Afonso")) {
+        if (!p1.getName().equals("Sergey Afonso")) {
             throw new Exception("Wrong name of p1");
         }
-        if(!p1.getAddress().equals("Via Margutta, 3")) {
+        if (!p1.getAddress().equals("Via Margutta, 3")) {
             throw new Exception("Wrong address of p1");
         }
-        if(!p1.getPhoneNumber().equals("30001")) {
+        if (!p1.getPhoneNumber().equals("30001")) {
             throw new Exception("Wrong phone number of p1");
         }
         /*if(p1.getId() != 1010) {
             throw new Exception("Wrong id of p1");
         }*/
-        if(!p1.getType().equals("faculty")) {
+        if (!p1.getType().equals("faculty")) {
             throw new Exception("Wrong type of p1");
         }
-        /*if(p1.getDocuments() != null) {
-            throw new Exception("Wrong documents of p3");
-        }*/
+        if (p1.getDocuments().size() != 0) {
+            throw new Exception("Wrong documents of p1");
+        }
 
-        if(!p3.getName().equals("Elvira Espindola")) {
+        if (!p3.getName().equals("Elvira Espindola")) {
             throw new Exception("Wrong name of p3");
         }
-        if(!p3.getAddress().equals("Via del Corso, 22")) {
+        if (!p3.getAddress().equals("Via del Corso, 22")) {
             throw new Exception("Wrong address of p3");
         }
-        if(!p3.getPhoneNumber().equals("30003")) {
+        if (!p3.getPhoneNumber().equals("30003")) {
             throw new Exception("Wrong phone number of p3");
         }
         /*if(p3.getId() != 1100) {
             throw new Exception("Wrong id of p3");
         }*/
-        if(!p3.getType().equals("student")) {
+        if (!p3.getType().equals("student")) {
             throw new Exception("Wrong type of p3");
         }
-        /*if(p3.getDocuments() != null) {
+        if (p3.getDocuments().size() != 0) {
             throw new Exception("Wrong documents of p3");
-        }*/
-
+        }
     }
 
     @Test
     public void testCase4() throws Exception {
         try {
-            User p2 = modelManager.getUserByName("p2");
-            p2.getId();
-            p2.getType();
-            p2.getDocuments();
-            p2.getName();
-            p2.getLogin();
+            User p2 = modelManager.getUserById(3);
+        } catch (Exception e) {
+            System.out.println();
+            System.out.println(e.getMessage());
+            System.out.println();
         }
-        catch(Exception e){
-            throw new Exception("Trying to access a user that is deleted or doesn't exist");
-        }
-        User p3 = modelManager.getUserByName("p3");
+        User p3 = modelManager.getUserById(4);
         p3.getId();
         p3.getType();
         p3.getDocuments();
@@ -162,21 +152,24 @@ public class Delivery2Tests {
     @Test
     public void testCase5() throws Exception {
         Document b1 = modelManager.getDocumentById(1);
-        User p2 = modelManager.getUserById(3);
-        if(p2 == null) {
-            throw new Exception("p2 is not a patron of the library hence he cannot check out any document.");
+        try {
+            User p2 = modelManager.getUserById(3);
+            bookingManager.bookDocument(b1, p2, 2, false);
+            bookingManager.checkOutDocument(b1, p2, modelManager.getUserById(1));
+        } catch (Exception e) {
+            System.out.println();
+            System.out.println(e.getMessage());
+            System.out.println();
         }
-        bookingManager.bookDocument(b1, p2, 2, false);
-        bookingManager.checkOutDocument(b1, p2, modelManager.getUserById(1));
     }
 
     @Test
     public void testCase6() throws Exception {
         User librarian = modelManager.getUserById(1);
-        User p1 = modelManager.getUserByName("p1");
-        Document b1 = modelManager.getDocumentByName("b1");
-        User p3 = modelManager.getUserByName("p3");
-        Document b2 = modelManager.getDocumentByName("b2");
+        User p1 = modelManager.getUserById(2);
+        Document b1 = modelManager.getDocumentById(1);
+        User p3 = modelManager.getUserById(4);
+        Document b2 = modelManager.getDocumentById(2);
         bookingManager.bookDocument(b1, p1, false);
         bookingManager.bookDocument(b1, p3, false);
         bookingManager.bookDocument(b2, p1, false);
@@ -206,11 +199,11 @@ public class Delivery2Tests {
 
         User p2 = modelManager.getUserByName("p2");
         Document av2 = modelManager.getDocumentByName("av2");
-        bookingManager.bookDocument(b1,  p2, false);
+        bookingManager.bookDocument(b1, p2, false);
         bookingManager.checkOutDocument(b1, p2, librarian);
-        bookingManager.bookDocument(b2,  p2, false);
+        bookingManager.bookDocument(b2, p2, false);
         bookingManager.checkOutDocument(b2, p2, librarian);
-        bookingManager.bookDocument(av2,  p2, false);
+        bookingManager.bookDocument(av2, p2, false);
         bookingManager.checkOutDocument(av2, p2, librarian);
         // get list of documents checked out by p1 and p2
     }
