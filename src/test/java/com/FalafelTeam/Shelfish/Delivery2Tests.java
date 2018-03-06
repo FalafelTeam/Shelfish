@@ -87,7 +87,47 @@ public class Delivery2Tests {
     }
 
     @Test
-    public void testCase3() {
+    public void testCase3() throws Exception {
+        User p1 = modelManager.getUserById(1010);
+        User p3 = modelManager.getUserById(1100);
+
+        if(!p1.getName().equals("Sergey Afonso")) {
+            throw new Exception("Wrong name of p1");
+        }
+        if(!p1.getAddress().equals("Via Margutta, 3")) {
+            throw new Exception("Wrong address of p1");
+        }
+        if(!p1.getPhoneNumber().equals("30001")) {
+            throw new Exception("Wrong phone number of p1");
+        }
+        if(p1.getId() != 1010) {
+            throw new Exception("Wrong id of p1");
+        }
+        if(!p1.getType().equals("faculty")) {
+            throw new Exception("Wrong type of p1");
+        }
+        if(p1.getDocuments() != null) {
+            throw new Exception("Wrong documents of p3");
+        }
+
+        if(!p3.getName().equals("Elvira Espindola")) {
+            throw new Exception("Wrong name of p3");
+        }
+        if(!p3.getAddress().equals("Via del Corso, 22")) {
+            throw new Exception("Wrong address of p3");
+        }
+        if(!p3.getPhoneNumber().equals("30003")) {
+            throw new Exception("Wrong phone number of p3");
+        }
+        if(p3.getId() != 1100) {
+            throw new Exception("Wrong id of p3");
+        }
+        if(!p3.getType().equals("student")) {
+            throw new Exception("Wrong type of p3");
+        }
+        if(p3.getDocuments() != null) {
+            throw new Exception("Wrong documents of p3");
+        }
 
     }
 
