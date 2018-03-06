@@ -23,7 +23,6 @@ public class Delivery2Tests {
     ModelManager modelManager;
     @Autowired
     BookingSystemManager bookingManager;
-    .;
 
     public void initialState() throws Exception {
         User librarian = modelManager.addUser("User", "librarian", "123", "123",
@@ -183,6 +182,7 @@ public class Delivery2Tests {
         // get list of documents checked out by p1 and p3
     }
 
+    @Test
     public void testCase7() throws Exception {
         initialState();
 
@@ -212,6 +212,7 @@ public class Delivery2Tests {
         // get list of documents checked out by p1 and p2
     }
 
+    @Test
     public void testCase8() throws Exception {
         initialState();
 
