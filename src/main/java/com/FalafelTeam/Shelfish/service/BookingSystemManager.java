@@ -65,6 +65,40 @@ public class BookingSystemManager {
         userRepository.save(user);
     }
 
+    public void bookDocument(Document document, User user, Integer weeksNum, Boolean isOutstanding, Date date) throws Exception {
+        if (document.getIsReference().equals(true)) {
+            throw new Exception("The document is a reference material");
+        }
+        DocumentUser documentUser = new DocumentUser(document, user, date, isOutstanding);
+        Integer maxWeeksNum;
+        if (document.getType().equals("book")) {
+            if (user.getType().equals("faculty")) {
+                maxWeeksNum = 4;
+            } else if (document.getIsBestseller()) {
+                maxWeeksNum = 2;
+            } else {
+                maxWeeksNum = 3;
+            }
+        } else {
+            maxWeeksNum = 2;
+        }
+        if (weeksNum == null) {
+            documentUser.setDueDate(addWeeks(documentUser.getDate(), maxWeeksNum));
+        } else if (weeksNum > maxWeeksNum) {
+            throw new Exception("The preferred number of booking weeks is too big");
+        } else {
+            documentUser.setDueDate(addWeeks(documentUser.getDate(), weeksNum));
+        }
+        documentUserRepository.save(documentUser);
+
+        document.addToQueue(documentUser);
+        documentRepository.save(document);
+
+        user.getDocuments().add(documentUser);
+        userRepository.save(user);
+    }
+
+
     /**
      * method for booking documents in the library when preferred number of booking weeks is not stated
      * @param document document that needs to be booked
