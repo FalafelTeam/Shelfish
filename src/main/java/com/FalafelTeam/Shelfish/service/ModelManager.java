@@ -489,6 +489,10 @@ public class ModelManager {
         return userRepository.findById(id);
     }
 
+    public User getUserByName(String name){
+        return userRepository.findByName(name);
+    }
+
     public List<Document> getAllDocuments() {
         return (List<Document>) documentRepository.findAll();
     }
@@ -500,6 +504,11 @@ public class ModelManager {
     public Document getDocumentById(Integer id) {
         return documentRepository.findById(id);
     }
+
+    public Document getDocumentByName(String name){
+        return documentRepository.findByName(name);
+    }
+
 
     public DocumentUser getDocumentUserByDocumentAndUser(Document document, User user, User currentUser) throws Exception {
         if (!currentUser.getType().equals("librarian")) {

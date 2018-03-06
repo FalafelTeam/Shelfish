@@ -2,6 +2,7 @@ package com.FalafelTeam.Shelfish;
 
 import com.FalafelTeam.Shelfish.model.Document;
 import com.FalafelTeam.Shelfish.model.User;
+import com.FalafelTeam.Shelfish.repository.UserRepository;
 import com.FalafelTeam.Shelfish.service.BookingSystemManager;
 import com.FalafelTeam.Shelfish.service.ModelManager;
 import org.junit.Test;
@@ -130,6 +131,45 @@ public class Delivery2Tests {
             throw new Exception("Wrong documents of p3");
         }*/
 
+    }
+
+    @Test
+    public void testCase4() throws Exception {
+        try {
+            User p2 = modelManager.getUserByName("p2");
+            p2.getId();
+            p2.getType();
+            p2.getDocuments();
+            p2.getName();
+            p2.getLogin();
+        }
+        catch(Exception e){
+            throw new Exception("Trying to access a user that is deleted or doesn't exist");
+        }
+        User p3 = modelManager.getUserByName("p3");
+        p3.getId();
+        p3.getType();
+        p3.getDocuments();
+        p3.getName();
+        p3.getLogin();
+    }
+
+    @Test
+    public void testCase6() throws Exception {
+//        User librarian = modelManager.getUserById(1);
+//        User p1 = modelManager.getUserByName("p1");
+//        Document b1 = modelManager.getDocumentByName("b1");
+//        User p3 = modelManager.getUserByName("p3");
+//        Document b2 = modelManager.getDocumentByName("b2");
+//        bookingManager.bookDocument(b1, p1, false);
+//        bookingManager.bookDocument(b1, p3, false);
+//        bookingManager.bookDocument(b2, p1, false);
+//        bookingManager.checkOutDocument(b1, p1, librarian);
+//        bookingManager.checkOutDocument(b1, p3, librarian);
+//        bookingManager.checkOutDocument(b2, p1, librarian);
+//        if(p1.getDocuments().contains(b1) &&
+//                p3.getDocuments().contains(b1) &&
+//                p1.getDocuments().)
     }
 
     private int getDocumentsNumber() {

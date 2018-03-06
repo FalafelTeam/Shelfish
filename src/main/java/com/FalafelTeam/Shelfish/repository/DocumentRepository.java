@@ -14,5 +14,7 @@ public interface DocumentRepository extends CrudRepository<Document, Integer> {
 
     Document findById(Integer id);
 
+    Document findByName(String name);
+
     List<Document> findAllByType(String type);
 }
