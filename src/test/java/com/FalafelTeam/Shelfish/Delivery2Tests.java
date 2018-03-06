@@ -155,6 +155,17 @@ public class Delivery2Tests {
     }
 
     @Test
+    public void testCase5() throws Exception {
+        Document b1 = modelManager.getDocumentById(1);
+        User p2 = modelManager.getUserById(3);
+        if(p2 == null) {
+            throw new Exception("p2 is not a patron of the library hence he cannot check out any document.");
+        }
+        bookingManager.bookDocument(b1, p2, 2, false);
+        bookingManager.checkOutDocument(b1, p2, modelManager.getUserById(1));
+    }
+
+    @Test
     public void testCase6() throws Exception {
 //        User librarian = modelManager.getUserById(1);
 //        User p1 = modelManager.getUserByName("p1");
