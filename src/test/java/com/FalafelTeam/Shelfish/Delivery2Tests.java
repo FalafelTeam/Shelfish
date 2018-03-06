@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.print.Doc;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,8 +26,7 @@ public class Delivery2Tests {
     @Autowired
     BookingSystemManager bookingManager;
 
-    @Test
-    public void testCase1() throws Exception {
+    public void initialState() throws Exception {
         User librarian = modelManager.addUser("User", "librarian", "123", "123",
                 "123", "123");
         List<String> authorNames = new LinkedList<>();
@@ -63,6 +63,11 @@ public class Delivery2Tests {
         /*modelManager.getUserById(1).setId(1010);
         modelManager.getUserById(2).setId(1011);
         modelManager.getUserById(3).setId(1100);*/
+    }
+
+    @Test
+    public void testCase1() throws Exception {
+        initialState();
     }
 
     @Test
@@ -167,20 +172,47 @@ public class Delivery2Tests {
 
     @Test
     public void testCase6() throws Exception {
-//        User librarian = modelManager.getUserById(1);
-//        User p1 = modelManager.getUserByName("p1");
-//        Document b1 = modelManager.getDocumentByName("b1");
-//        User p3 = modelManager.getUserByName("p3");
-//        Document b2 = modelManager.getDocumentByName("b2");
-//        bookingManager.bookDocument(b1, p1, false);
-//        bookingManager.bookDocument(b1, p3, false);
-//        bookingManager.bookDocument(b2, p1, false);
-//        bookingManager.checkOutDocument(b1, p1, librarian);
-//        bookingManager.checkOutDocument(b1, p3, librarian);
-//        bookingManager.checkOutDocument(b2, p1, librarian);
-//        if(p1.getDocuments().contains(b1) &&
-//                p3.getDocuments().contains(b1) &&
-//                p1.getDocuments().)
+        User librarian = modelManager.getUserById(1);
+        User p1 = modelManager.getUserByName("p1");
+        Document b1 = modelManager.getDocumentByName("b1");
+        User p3 = modelManager.getUserByName("p3");
+        Document b2 = modelManager.getDocumentByName("b2");
+        bookingManager.bookDocument(b1, p1, false);
+        bookingManager.bookDocument(b1, p3, false);
+        bookingManager.bookDocument(b2, p1, false);
+        bookingManager.checkOutDocument(b1, p1, librarian);
+        bookingManager.checkOutDocument(b1, p3, librarian);
+        bookingManager.checkOutDocument(b2, p1, librarian);
+        // get list of documents checked out by p1 and p3
+    }
+
+    public void testCase7() throws Exception {
+        initialState();
+
+        User librarian = modelManager.getUserById(1);
+        User p1 = modelManager.getUserByName("p1");
+        Document b1 = modelManager.getDocumentByName("b1");
+        Document b2 = modelManager.getDocumentByName("b2");
+        Document b3 = modelManager.getDocumentByName("b3");
+        Document av1 = modelManager.getDocumentByName("av1");
+        bookingManager.bookDocument(b1, p1, false);
+        bookingManager.checkOutDocument(b1, p1, librarian);
+        bookingManager.bookDocument(b2, p1, false);
+        bookingManager.checkOutDocument(b2, p1, librarian);
+        bookingManager.bookDocument(b3, p1, false);
+        bookingManager.checkOutDocument(b3, p1, librarian);
+        bookingManager.bookDocument(av1, p1, false);
+        bookingManager.checkOutDocument(av1, p1, librarian);
+
+        User p2 = modelManager.getUserByName("p2");
+        Document av2 = modelManager.getDocumentByName("av2");
+        bookingManager.bookDocument(b1,  p2, false);
+        bookingManager.checkOutDocument(b1, p2, librarian);
+        bookingManager.bookDocument(b2,  p2, false);
+        bookingManager.checkOutDocument(b2, p2, librarian);
+        bookingManager.bookDocument(av2,  p2, false);
+        bookingManager.checkOutDocument(av2, p2, librarian);
+        // get list of documents checked out by p1 and p2
     }
 
     private int getDocumentsNumber() {
