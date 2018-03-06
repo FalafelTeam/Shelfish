@@ -149,7 +149,7 @@ public class Delivery2Tests {
             p2.getLogin();
         }
         catch(Exception e){
-            throw new Exception("Trying to access a user that is deleted or doesn't exist");
+            //throw new Exception("Trying to access a user that is deleted or doesn't exist");
         }
         User p3 = modelManager.getUserByName("p3");
         p3.getId();
@@ -172,17 +172,20 @@ public class Delivery2Tests {
 
     @Test
     public void testCase6() throws Exception {
+        initialState();
+
         User librarian = modelManager.getUserById(1);
-        User p1 = modelManager.getUserByName("p1");
-        Document b1 = modelManager.getDocumentByName("b1");
-        User p3 = modelManager.getUserByName("p3");
-        Document b2 = modelManager.getDocumentByName("b2");
+        User p1 = modelManager.getUserById(2);
+        Document b1 = modelManager.getDocumentById(1);
+        User p3 = modelManager.getUserById(4);
+        Document b2 = modelManager.getDocumentById(2);
         bookingManager.bookDocument(b1, p1, false);
         bookingManager.bookDocument(b1, p3, false);
         bookingManager.bookDocument(b2, p1, false);
         bookingManager.checkOutDocument(b1, p1, librarian);
         bookingManager.checkOutDocument(b1, p3, librarian);
         bookingManager.checkOutDocument(b2, p1, librarian);
+
         // get list of documents checked out by p1 and p3
     }
 
