@@ -103,9 +103,9 @@ public class Delivery2Tests {
         if (!p1.getPhoneNumber().equals("30001")) {
             throw new Exception("Wrong phone number of p1");
         }
-        /*if(p1.getId() != 1010) {
+        if (p1.getId() != 2) {
             throw new Exception("Wrong id of p1");
-        }*/
+        }
         if (!p1.getType().equals("faculty")) {
             throw new Exception("Wrong type of p1");
         }
@@ -122,9 +122,9 @@ public class Delivery2Tests {
         if (!p3.getPhoneNumber().equals("30003")) {
             throw new Exception("Wrong phone number of p3");
         }
-        /*if(p3.getId() != 1100) {
+        if (p3.getId() != 4) {
             throw new Exception("Wrong id of p3");
-        }*/
+        }
         if (!p3.getType().equals("student")) {
             throw new Exception("Wrong type of p3");
         }
@@ -143,11 +143,24 @@ public class Delivery2Tests {
             System.out.println();
         }
         User p3 = modelManager.getUserById(4);
-        p3.getId();
-        p3.getType();
-        p3.getDocuments();
-        p3.getName();
-        p3.getLogin();
+        if (!p3.getName().equals("Elvira Espindola")) {
+            throw new Exception("Wrong name of p3");
+        }
+        if (!p3.getAddress().equals("Via del Corso, 22")) {
+            throw new Exception("Wrong address of p3");
+        }
+        if (!p3.getPhoneNumber().equals("30003")) {
+            throw new Exception("Wrong phone number of p3");
+        }
+        if (p3.getId() != 4) {
+            throw new Exception("Wrong id of p3");
+        }
+        if (!p3.getType().equals("student")) {
+            throw new Exception("Wrong type of p3");
+        }
+        if (p3.getDocuments().size() != 0) {
+            throw new Exception("Wrong documents of p3");
+        }
     }
 
     @Test
@@ -179,8 +192,6 @@ public class Delivery2Tests {
         bookingManager.checkOutDocument(b1, p1, librarian);
         bookingManager.checkOutDocument(b1, p3, librarian);
         bookingManager.checkOutDocument(b2, p1, librarian);
-
-        // get list of documents checked out by p1 and p3
     }
 
     @Test
@@ -223,7 +234,6 @@ public class Delivery2Tests {
                 ok = false;
             }
         }
-        // get list of documents checked out by p1 and p2
     }
 
     @Test
