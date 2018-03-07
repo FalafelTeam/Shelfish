@@ -1,6 +1,7 @@
 package com.FalafelTeam.Shelfish;
 
 import com.FalafelTeam.Shelfish.model.Document;
+import com.FalafelTeam.Shelfish.model.DocumentUser;
 import com.FalafelTeam.Shelfish.model.User;
 import com.FalafelTeam.Shelfish.service.BookingSystemManager;
 import com.FalafelTeam.Shelfish.service.ModelManager;
@@ -186,29 +187,42 @@ public class Delivery2Tests {
     public void testCase7() throws Exception {
         initialState();
 
-        User librarian = modelManager.getUserById(1);
-        User p1 = modelManager.getUserByName("p1");
-        Document b1 = modelManager.getDocumentByName("b1");
-        Document b2 = modelManager.getDocumentByName("b2");
-        Document b3 = modelManager.getDocumentByName("b3");
-        Document av1 = modelManager.getDocumentByName("av1");
+        User librarian = modelManager.getUserById(5);
+        User p1 = modelManager.getUserById(6);
+        Document b1 = modelManager.getDocumentById(6);
+        Document b2 = modelManager.getDocumentById(7);
+        Document b3 = modelManager.getDocumentById(8);
+        Document av1 = modelManager.getDocumentById(9);
         bookingManager.bookDocument(b1, p1, false);
         bookingManager.checkOutDocument(b1, p1, librarian);
         bookingManager.bookDocument(b2, p1, false);
         bookingManager.checkOutDocument(b2, p1, librarian);
-        bookingManager.bookDocument(b3, p1, false);
-        bookingManager.checkOutDocument(b3, p1, librarian);
+        try {
+            bookingManager.bookDocument(b3, p1, false);
+            bookingManager.checkOutDocument(b3, p1, librarian);
+        } catch (Exception e) {
+            System.out.println();
+            System.out.println(e.getMessage());
+            System.out.println();
+        }
         bookingManager.bookDocument(av1, p1, false);
         bookingManager.checkOutDocument(av1, p1, librarian);
 
-        User p2 = modelManager.getUserByName("p2");
-        Document av2 = modelManager.getDocumentByName("av2");
+        User p2 = modelManager.getUserById(7);
+        Document av2 = modelManager.getDocumentById(10);
         bookingManager.bookDocument(b1, p2, false);
         bookingManager.checkOutDocument(b1, p2, librarian);
         bookingManager.bookDocument(b2, p2, false);
         bookingManager.checkOutDocument(b2, p2, librarian);
         bookingManager.bookDocument(av2, p2, false);
         bookingManager.checkOutDocument(av2, p2, librarian);
+        boolean ok = true;
+        List<DocumentUser> documentUsers = p1.getDocuments();
+        for (int i = 0; i < documentUsers.size(); i++) {
+            if (!documentUsers.get(i).getDocument().getName().equals(b1.getName())) {
+                ok = false;
+            }
+        }
         // get list of documents checked out by p1 and p2
     }
 
@@ -216,12 +230,12 @@ public class Delivery2Tests {
     public void testCase8() throws Exception {
         initialState();
 
-        User librarian = modelManager.getUserById(1);
-        User p1 = modelManager.getUserById(2);
-        Document b1 = modelManager.getDocumentById(1);
-        User p2 = modelManager.getUserById(3);
-        Document b2 =  modelManager.getDocumentById(2);
-        Document av1 = modelManager.getDocumentById(4);
+        User librarian = modelManager.getUserById(9);
+        User p1 = modelManager.getUserById(10);
+        Document b1 = modelManager.getDocumentById(11);
+        User p2 = modelManager.getUserById(11);
+        Document b2 =  modelManager.getDocumentById(12);
+        Document av1 = modelManager.getDocumentById(14);
 
         bookingManager.bookDocument(b1, p1, null, false, new Date(2018, 2, 9));
         bookingManager.checkOutDocument(b1, p1, librarian);
