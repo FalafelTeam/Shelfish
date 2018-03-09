@@ -23,8 +23,8 @@ public class DocumentUser {
     @ManyToOne
     @JoinColumn(name = "user_id")
     @Getter private User user;
-    @Getter private Date date;
-    @Getter @Setter private Date dueDate;
+    @Getter @Setter private Date date;
+    @Getter @Setter private Integer weekNum;
     @Getter private String status; // "new" (not taken) / "taken" / "outstanding" / "renewed"
 
     public DocumentUser() {

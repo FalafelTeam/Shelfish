@@ -25,7 +25,7 @@ public class BookingSystemManager {
     /**
      * method for booking documents in the library when preferred number of booking weeks is stated
      * @param document document that needs to be booked
-     * @param user user that wants to book the document
+     * @param user user who wants to book the document
      * @param weeksNum preferred number of booking weeks
      * @param isOutstanding if the request for the document is outstanding
      * @throws Exception "The preferred number of booking weeks is too big" when the preferred number of booking weeks
@@ -50,44 +50,11 @@ public class BookingSystemManager {
             maxWeeksNum = 2;
         }
         if (weeksNum == null) {
-            documentUser.setDueDate(addWeeks(documentUser.getDate(), maxWeeksNum));
+            documentUser.setWeekNum(maxWeeksNum);
         } else if (weeksNum > maxWeeksNum) {
             throw new Exception("The preferred number of booking weeks is too big");
         } else {
-            documentUser.setDueDate(addWeeks(documentUser.getDate(), weeksNum));
-        }
-        documentUserRepository.save(documentUser);
-
-        document.addToQueue(documentUser);
-        documentRepository.save(document);
-
-        user.getDocuments().add(documentUser);
-        userRepository.save(user);
-    }
-
-    public void bookDocument(Document document, User user, Integer weeksNum, Boolean isOutstanding, Date date) throws Exception {
-        if (document.getIsReference().equals(true)) {
-            throw new Exception("The document is a reference material");
-        }
-        DocumentUser documentUser = new DocumentUser(document, user, date, isOutstanding);
-        Integer maxWeeksNum;
-        if (document.getType().equals("book")) {
-            if (user.getType().equals("faculty")) {
-                maxWeeksNum = 4;
-            } else if (document.getIsBestseller()) {
-                maxWeeksNum = 2;
-            } else {
-                maxWeeksNum = 3;
-            }
-        } else {
-            maxWeeksNum = 2;
-        }
-        if (weeksNum == null) {
-            documentUser.setDueDate(addWeeks(documentUser.getDate(), maxWeeksNum));
-        } else if (weeksNum > maxWeeksNum) {
-            throw new Exception("The preferred number of booking weeks is too big");
-        } else {
-            documentUser.setDueDate(addWeeks(documentUser.getDate(), weeksNum));
+            documentUser.setWeekNum(weeksNum);
         }
         documentUserRepository.save(documentUser);
 
@@ -100,16 +67,13 @@ public class BookingSystemManager {
 
 
     /**
-     * method for booking documents in the library when preferred number of booking weeks is not stated
+     * method for booking documents in the library
      * @param document document that needs to be booked
      * @param user user that wants to book the document
      * @param isOutstanding if the request for the document is outstanding
      * @throws Exception "The document is reference material"
      */
     public void bookDocument(Document document, User user, Boolean isOutstanding) throws Exception {
-        if (document.getIsReference()) {
-            throw new Exception("The document is reference material");
-        }
         bookDocument(document, user, null, isOutstanding);
     }
 
@@ -149,11 +113,15 @@ public class BookingSystemManager {
         if (found == null) {
             throw new Exception("The document wasn't booked by the user");
         }
-        if (document.queueContains(found)) {
-            found.setStatus("taken");
-            documentUserRepository.save(found);
-        } else throw new Exception("The user is not in the queue for the book");
-
+        if (!document.queueContains(found)) {
+            throw new Exception("The user is not in the queue for the book");
+        }
+        if (addWeeks(found.getDate(), 1).before(new Date())) {
+            throw new Exception("The booking is overdue");
+        }
+        found.setDate(new Date());
+        found.setStatus("taken");
+        documentUserRepository.save(found);
     }
 
     /**
@@ -168,15 +136,15 @@ public class BookingSystemManager {
         DocumentUser found = documentUserRepository.findByUserAndDocument(user, document);
         if (found == null) {
             throw new Exception("The document wasn't booked by the user");
-        } else if (found.getStatus().equals("new")) {
-            throw new Exception("The document wasn't checked out by the user");
-        } else {
-            document.getUsers().remove(found);
-            documentRepository.save(document);
-            user.getDocuments().remove(found);
-            userRepository.save(user);
-            documentUserRepository.delete(found);
         }
+        if (found.getStatus().equals("new")) {
+            throw new Exception("The document wasn't checked out by the user");
+        }
+        document.getUsers().remove(found);
+        documentRepository.save(document);
+        user.getDocuments().remove(found);
+        userRepository.save(user);
+        documentUserRepository.delete(found);
     }
 
     /**
@@ -191,6 +159,11 @@ public class BookingSystemManager {
         // the request sending
     }
 
+    /**
+     * method that checks if the user stated as a librarian is truly librarian
+     * @param user the user that needs to be checked
+     * @throws Exception "Permission denied" if teh user is not a librarian
+     */
     private void checkIfIsLibrarian(User user) throws Exception {
         if (!user.getType().equals("librarian")) {
             throw new Exception("Permission denied");

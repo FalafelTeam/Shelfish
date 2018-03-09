@@ -236,7 +236,8 @@ public class Delivery2Tests {
         }
     }
 
-    @Test
+    // the following test uses old functionality
+    /*@Test
     public void testCase8() throws Exception {
         initialState();
 
@@ -255,7 +256,7 @@ public class Delivery2Tests {
         bookingManager.checkOutDocument(b1, p2, librarian);
         bookingManager.bookDocument(av1, p2, null, false, new Date(2018, 2, 17));
         bookingManager.checkOutDocument(av1, p2, librarian);
-    }
+    }*/
 
     private int getDocumentsNumber() {
         int copies = 0;
