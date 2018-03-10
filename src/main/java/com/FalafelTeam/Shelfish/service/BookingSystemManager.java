@@ -106,12 +106,23 @@ public class BookingSystemManager {
             throw new Exception("The document is a reference material");
         }
         checkIfIsLibrarian(librarian);
-        if (document.availableCopies() <= 0) {
-            throw new Exception("There are no copies of the document available");
-        }
         DocumentUser found = documentUserRepository.findByUserAndDocument(patron, document);
         if (found == null) {
             throw new Exception("The document wasn't booked by the user");
+        }
+        switch (found.getStatus()) {
+            case "new":
+                if (document.availableCopies() <= 0) {
+                    throw new Exception("There are no copies of the document available");
+                }
+                break;
+            case "outstanding":
+                if (document.availableCopiesForOutstanding() <= 0) {
+                    throw new Exception(("There are no copies of the document available"));
+                }
+                break;
+            default:
+                throw new Exception("The document wasn't booked by the user");
         }
         if (!document.queueContains(found)) {
             throw new Exception("The user is not in the queue for the book");
@@ -148,7 +159,7 @@ public class BookingSystemManager {
     }
 
     public void renewDocument(Document document, User patron, User librarian) {
-        
+
     }
 
     public void getAllFine(User user) {

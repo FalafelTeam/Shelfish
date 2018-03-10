@@ -198,5 +198,9 @@ public class Document {
     public Integer availableCopies() {
         return copies - this.takenBySize() - outstandingRequestsNum();
     }
+
+    public Integer availableCopiesForOutstanding() {
+        return copies - this.takenBySize();
+    }
 }
 
