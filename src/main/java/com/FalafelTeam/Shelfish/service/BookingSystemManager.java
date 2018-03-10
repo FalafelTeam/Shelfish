@@ -83,7 +83,7 @@ public class BookingSystemManager {
      * @param weekNum number of weeks by which the date should be increased
      * @return the increased date
      */
-    private Date addWeeks(Date date, int weekNum) {
+    private Date addWeeks(Date date, Integer weekNum) {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DATE, 7 * weekNum);
@@ -106,7 +106,7 @@ public class BookingSystemManager {
             throw new Exception("The document is a reference material");
         }
         checkIfIsLibrarian(librarian);
-        if (document.availableCopies() == 0) {
+        if (document.availableCopies() <= 0) {
             throw new Exception("There are no copies of the document available");
         }
         DocumentUser found = documentUserRepository.findByUserAndDocument(patron, document);
@@ -137,7 +137,7 @@ public class BookingSystemManager {
         if (found == null) {
             throw new Exception("The document wasn't booked by the user");
         }
-        if (found.getStatus().equals("new")) {
+        if (found.getStatus().equals("new") || found.getStatus().equals("outstanding")) {
             throw new Exception("The document wasn't checked out by the user");
         }
         document.getUsers().remove(found);
@@ -145,6 +145,26 @@ public class BookingSystemManager {
         user.getDocuments().remove(found);
         userRepository.save(user);
         documentUserRepository.delete(found);
+    }
+
+    public void renewDocument(Document document, User patron, User librarian) {
+        
+    }
+
+    public void getAllFine(User user) {
+
+    }
+
+    public void getFine(Document document, User user) {
+
+    }
+
+    public void returnFine(Document document, User patron, User librarian) {
+
+    }
+
+    public void returnFine(Integer amount, User patron, User librarian) {
+
     }
 
     /**
