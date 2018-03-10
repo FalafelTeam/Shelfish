@@ -24,38 +24,24 @@ public class BookingSystemManager {
 
     /**
      * method for booking documents in the library when preferred number of booking weeks is stated
-     * @param document document that needs to be booked
-     * @param user user who wants to book the document
-     * @param weeksNum preferred number of booking weeks
-     * @param isOutstanding if the request for the document is outstanding
-     * @throws Exception "The preferred number of booking weeks is too big" when the preferred number of booking weeks
+     * @param document Document that needs to be booked
+     * @param user User who wants to book the document
+     * @param weeksNum preferred Integer number of booking weeks (null if maximum)
+     * @param isOutstanding Boolean value that shows if the request for the document is outstanding
+     * @throws Exception "The preferred number of weeks is too big" when the preferred number of booking weeks
      *                          is bigger than allowed
      *                   "The document is a reference material"
+     *                   "Cannot book several copies of the document"
      */
     public void bookDocument(Document document, User user, Integer weeksNum, Boolean isOutstanding) throws Exception {
         if (document.getIsReference().equals(true)) {
             throw new Exception("The document is a reference material");
         }
+        if (documentUserRepository.findByUserAndDocument(user, document) != null) {
+            throw new Exception("Cannot book several copies of the document");
+        }
         DocumentUser documentUser = new DocumentUser(document, user, new Date(), isOutstanding);
-        Integer maxWeeksNum;
-        if (document.getType().equals("book")) {
-            if (user.getType().equals("faculty")) {
-                maxWeeksNum = 4;
-            } else if (document.getIsBestseller()) {
-                maxWeeksNum = 2;
-            } else {
-                maxWeeksNum = 3;
-            }
-        } else {
-            maxWeeksNum = 2;
-        }
-        if (weeksNum == null) {
-            documentUser.setWeekNum(maxWeeksNum);
-        } else if (weeksNum > maxWeeksNum) {
-            throw new Exception("The preferred number of booking weeks is too big");
-        } else {
-            documentUser.setWeekNum(weeksNum);
-        }
+        documentUser.setPreferredWeekNum(weeksNum, maxWeeksNum(document, user));
         documentUserRepository.save(documentUser);
 
         document.addToQueue(documentUser);
@@ -68,9 +54,9 @@ public class BookingSystemManager {
 
     /**
      * method for booking documents in the library
-     * @param document document that needs to be booked
-     * @param user user that wants to book the document
-     * @param isOutstanding if the request for the document is outstanding
+     * @param document Document that needs to be booked
+     * @param user User that wants to book the document
+     * @param isOutstanding Boolean value that shows if the request for the document is outstanding
      * @throws Exception "The document is reference material"
      */
     public void bookDocument(Document document, User user, Boolean isOutstanding) throws Exception {
@@ -79,9 +65,9 @@ public class BookingSystemManager {
 
     /**
      * supporting method that adds weeks to the date
-     * @param date the date which has to be increased
-     * @param weekNum number of weeks by which the date should be increased
-     * @return the increased date
+     * @param date the Date which has to be increased
+     * @param weekNum Integer number of weeks by which the date should be increased
+     * @return the increased Date
      */
     private Date addWeeks(Date date, Integer weekNum) {
         Calendar cal = Calendar.getInstance();
@@ -91,10 +77,30 @@ public class BookingSystemManager {
     }
 
     /**
+     * method that finds the maximum number of weeks the user can check out the document for
+     * @param document Document that is being checked out
+     * @param user User who checks out the document
+     * @return Integer number of weeks
+     */
+    private Integer maxWeeksNum(Document document, User user) {
+        if (document.getType().equals("book")) {
+            if (user.getType().equals("faculty")) {
+                return 4;
+            } else if (document.getIsBestseller()) {
+                return 2;
+            } else {
+                return 3;
+            }
+        } else {
+            return 2;
+        }
+    }
+
+    /**
      * method for checking out a book from the library
-     * @param document document that needs to be checked out
-     * @param patron patron that wants to check out the document
-     * @param librarian librarian that fulfills the check out requst
+     * @param document Document that needs to be checked out
+     * @param patron User patron who wants to check out the document
+     * @param librarian User librarian who fulfills the check out requst
      * @throws Exception "Permission denied" if the user who tries to fulfill the request is not a librarian
      *                   "The user is not in the queue for the book"
      *                   "The document wasn't booked by the user"
@@ -137,8 +143,8 @@ public class BookingSystemManager {
 
     /**
      * method for returning the document to the library
-     * @param document the document that is being returned
-     * @param user the user that is returning the document
+     * @param document the Document that is being returned
+     * @param user the User who is returning the document
      * @throws Exception "The document wasn't booked by the user"
      *                   "The document wasn't checked out by the user"
      */
@@ -158,8 +164,38 @@ public class BookingSystemManager {
         documentUserRepository.delete(found);
     }
 
-    public void renewDocument(Document document, User patron, User librarian) {
+    /**
+     * method for renewing documents when preferred number of weeks is stated
+     * @param document Document that has to be renewed
+     * @param weeksNum Integer number of preferred weeks
+     * @param patron User who wants to renew the book
+     * @throws Exception "The preferred number of weeks is too big"
+     *                   "The document wasn't checked out by the user or it was already renewed once"
+     *                   "The item must be returned immediately"
+     */
+    public void renewDocument(Document document, Integer weeksNum, User patron) throws Exception {
+        DocumentUser documentUser = documentUserRepository.findByUserAndDocument(patron, document);
+        if (documentUser == null || !documentUser.getStatus().equals("taken")) {
+            throw new Exception("The document wasn't checked out by the user or it was already renewed once");
+        }
+        if (document.availableCopiesForOutstanding() <= 0) {
+            throw new Exception("The item must be returned immediately");
+        }
+        documentUser.setDate(addWeeks(documentUser.getDate(), documentUser.getWeekNum()));
+        documentUser.setPreferredWeekNum(weeksNum, maxWeeksNum(document, patron));
+        documentUser.setStatus("renewed");
+        documentUserRepository.save(documentUser);
+    }
 
+    /**
+     * method for renewing documents when preferred number of weeks is not stated
+     * @param document Document that has to be renewed
+     * @param patron User who wants to renew the book
+     * @throws Exception "The document wasn't checked out by the user or it was already renewed once"
+     *                   "The item must be returned immediately"
+     */
+    public void renewDocument(Document document, User patron) throws Exception {
+        renewDocument(document, null, patron);
     }
 
     public void getAllFine(User user) {
@@ -180,9 +216,9 @@ public class BookingSystemManager {
 
     /**
      * method that sends the return request for the document to the user
-     * @param document the document that has to be returned
-     * @param user the user who has to return the document
-     * @param librarian the user who sends the return request
+     * @param document the Document that has to be returned
+     * @param user the User who has to return the document
+     * @param librarian the User who sends the return request
      * @throws Exception "Permission denied" if the user who tries to send the return request is not a librarian
      */
     public void requestReturn(Document document, User user, User librarian) throws Exception {
@@ -192,7 +228,7 @@ public class BookingSystemManager {
 
     /**
      * method that checks if the user stated as a librarian is truly librarian
-     * @param user the user that needs to be checked
+     * @param user the User that needs to be checked
      * @throws Exception "Permission denied" if teh user is not a librarian
      */
     private void checkIfIsLibrarian(User user) throws Exception {

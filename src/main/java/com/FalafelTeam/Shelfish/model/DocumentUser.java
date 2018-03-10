@@ -52,6 +52,16 @@ public class DocumentUser {
         }
     }
 
+    public void setPreferredWeekNum(Integer weekNum, Integer maxWeekNum) throws Exception {
+        if (weekNum == null) {
+            this.setWeekNum(maxWeekNum);
+        } else if (weekNum > maxWeekNum) {
+            throw new Exception("The preferred number of weeks is too big");
+        } else {
+            this.setWeekNum(weekNum);
+        }
+    }
+
     @PreRemove
     private void preRemove() {
         this.document.getUsers().remove(this);
