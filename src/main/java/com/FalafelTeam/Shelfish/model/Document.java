@@ -190,7 +190,24 @@ public class Document {
         return num;
     }
 
+    public Integer outstandingRequestsNum() {
+        int num = 0;
+        ListIterator<DocumentUser> iterator = users.listIterator();
+        DocumentUser found;
+        while (iterator.hasNext()) {
+            found = iterator.next();
+            if (found.getStatus().equals("outstanding")) {
+                num++;
+            }
+        }
+        return num;
+    }
+
     public Integer availableCopies() {
+        return copies - this.takenBySize() - outstandingRequestsNum();
+    }
+
+    public Integer availableCopiesForOutstanding() {
         return copies - this.takenBySize();
     }
 

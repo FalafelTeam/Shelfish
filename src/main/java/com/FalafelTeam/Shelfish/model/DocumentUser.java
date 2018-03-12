@@ -23,8 +23,8 @@ public class DocumentUser {
     @ManyToOne
     @JoinColumn(name = "user_id")
     @Getter private User user;
-    @Getter private Date date;
-    @Getter @Setter private Date dueDate;
+    @Getter @Setter private Date date;
+    @Getter @Setter private Integer weekNum;
     @Getter private String status; // "new" (not taken) / "taken" / "outstanding" / "renewed"
 
     public DocumentUser() {
@@ -49,6 +49,16 @@ public class DocumentUser {
         }
         else{
             throw new Exception("Wrong status");
+        }
+    }
+
+    public void setPreferredWeekNum(Integer weekNum, Integer maxWeekNum) throws Exception {
+        if (weekNum == null) {
+            this.setWeekNum(maxWeekNum);
+        } else if (weekNum > maxWeekNum) {
+            throw new Exception("The preferred number of weeks is too big");
+        } else {
+            this.setWeekNum(weekNum);
         }
     }
 
