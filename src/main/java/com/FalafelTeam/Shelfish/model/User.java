@@ -27,6 +27,8 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = {CascadeType.ALL})
     @Getter private List<DocumentUser> documents;
 
+    @Getter @Setter int priority;
+
     public User() {
         this.documents = new ArrayList<DocumentUser>();
     }
@@ -42,12 +44,23 @@ public class User {
     }
 
     public void setType(String type) throws Exception {
-        if(Objects.equals(type, "student") || Objects.equals(type, "faculty") || Objects.equals(type, "librarian")){
-            this.type=type;
+        switch(type) {
+            case "student":
+                this.priority = 1;
+                break;
+            case "Instructor":
+                this.priority = 2;
+                break;
+            case "TA":
+                this.priority = 3;
+                break;
+            case "professor":
+                this.priority = 4;
+                break;
+            default:
+                throw new Exception("Invalid status of user");
         }
-        else{
-            throw new Exception("Invalid status of user");
-        }
+        this.type = type;
     }
 
     public void setPassword(String password) throws Exception {

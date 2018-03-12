@@ -38,6 +38,8 @@ public class Document {
     @Getter @Setter private String type;
     @Getter @Setter private String image;
 
+    //private PriorityQueue<User> queue;
+
     public Document() {
         this.copies = 0;
         this.edition = 0;
@@ -46,13 +48,16 @@ public class Document {
         this.isReference = false;
         this.authors = new LinkedList<Author>();
         this.users = new LinkedList<DocumentUser>();
+        //Comparator<User> comparator = new UserComparator();
+        //this.queue = new PriorityQueue<User>(5, comparator);
     }
 
     public Document(String name, String description, int copies, int price, boolean isReference, boolean isBestseller,
                     int edition, Date publicationDate, Publisher publisher, List<Author> authors, String image){
         this.authors = new LinkedList<Author>();            // Book (type 0)
         this.users = new LinkedList<DocumentUser>();
-        this.name=name;
+        //Comparator<User> comparator = new UserComparator();
+        //this.queue = new PriorityQueue<User>(5, comparator);        this.name=name;
         this.description = description;
         this.copies = copies;
         this.price=price;
@@ -79,7 +84,8 @@ public class Document {
                     Date publicationDate, Publisher publisher, Editor editor, String image){
         this.authors = new LinkedList<Author>();
         this.users = new LinkedList<DocumentUser>();            // Article (Type 1)
-        this.name=name;
+        //Comparator<User> comparator = new UserComparator();
+        //this.queue = new PriorityQueue<User>(5, comparator);        this.name=name;
         this.description = description;
         this.copies = copies;
         this.price=price;
@@ -96,6 +102,8 @@ public class Document {
                     Date publicationDate, List<Author> authors, String image){
         this.authors = new LinkedList<Author>();
         this.users = new LinkedList<DocumentUser>();            // AV Material (type 2)
+        //Comparator<User> comparator = new UserComparator();
+        //this.queue = new PriorityQueue<User>(0, comparator);
         this.name=name;
         this.description = description;
         this.copies = copies;
@@ -185,5 +193,28 @@ public class Document {
     public Integer availableCopies() {
         return copies - this.takenBySize();
     }
+
+//    public User dequeue(){
+//        return queue.remove();
+//    }
+//
+//    public void enqueue(User user){
+//        queue.add(user);
+//    }
+
 }
+
+//class UserComparator implements Comparator<User>{
+//
+//    @Override
+//    public int compare(User o1, User o2) {
+//        if(o1.priority < o2.priority){
+//            return -1;
+//        }
+//        if(o1.priority > o2.priority){
+//            return 1;
+//        }
+//        return 0;
+//    }
+//}
 
