@@ -1,5 +1,7 @@
 # Shelfish: The Library Management System
-<img src="tmp/logo.png" width="250">
+<p align="center">
+ <img src="tmp/logo.png" width="250">
+</p>
 For our project, we decided to use:
  * Java
  * Maven
