@@ -1,5 +1,5 @@
 # Shelfish: The Library Management System
-![Shelfish Alpha Logo](/tmp/logo.png =250x250)
+![Shelfish Alpha Logo](/tmp/logo.png | width=250)
 For our project, we decided to use:
  * Java
  * Maven
