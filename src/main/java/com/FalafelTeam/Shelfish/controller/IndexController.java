@@ -28,7 +28,7 @@ public class IndexController {
     @GetMapping
     public String indexForm(Model model) {
         model.addAttribute("signin", new SignInData());
-        return "index";
+        return "loginPage";
     }
 
     /**
